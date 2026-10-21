@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MT5 Client P&amp;L Analyzer</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--tx:#16202e;--mut:#6b7686;--bd:#e5e9f0;--ac:#4f46e5;--g:#12a150;--r:#e5484d;--gs:#e6f6ec;--rs:#fdeceb;--hl:#eef0ff;--sh:0 2px 10px rgba(20,30,60,.06);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1117;--card:#171b24;--tx:#e8ecf3;--mut:#93a0b4;--bd:#262c38;--ac:#8b86ff;--g:#34d27b;--r:#ff6b70;--gs:#12301f;--rs:#3a1a1c;--hl:#1e2240;--sh:none;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1117;--card:#171b24;--tx:#e8ecf3;--mut:#93a0b4;--bd:#262c38;--ac:#8b86ff;--g:#34d27b;--r:#ff6b70;--gs:#12301f;--rs:#3a1a1c;--hl:#1e2240;--sh:none;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:1100px;margin:0 auto;padding:0 16px 40px}
+.top{background:linear-gradient(135deg,#4f46e5,#7c3aed 55%,#06b6d4);color:#fff;padding:26px 16px 70px}
+.top .in{max-width:1100px;margin:0 auto}.top h1{margin:0;font-size:24px}.top p{margin:4px 0 0;opacity:.9}
+.live{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);border-radius:99px;padding:2px 10px;font-size:12px;margin-bottom:8px}
+.live i{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:pl 1.4s infinite}
+@keyframes pl{0%{box-shadow:0 0 0 0 rgba(74,222,128,.7)}100%{box-shadow:0 0 0 9px rgba(74,222,128,0)}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;box-shadow:var(--sh);animation:up .5s both}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.drop{margin-top:-48px;text-align:center;cursor:pointer;padding:26px;border:2px dashed var(--bd)}.drop.h{border-color:var(--ac);background:var(--hl)}
+.drop b{font-size:16px}.big{font-size:34px}
+.m{color:var(--mut)}.s{font-size:12px;color:var(--mut)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+.tab{border:1px solid var(--bd);background:var(--card);border-radius:99px;padding:6px 14px;cursor:pointer;font:inherit;color:var(--tx)}.tab.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.hero{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.hero .n{font-size:42px;font-weight:800;letter-spacing:-1px;line-height:1.1}
+.pill{display:inline-block;border-radius:99px;padding:3px 12px;font-weight:600;font-size:13px}.pill.g{background:var(--gs);color:var(--g)}.pill.r{background:var(--rs);color:var(--r)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:14px}
+.grid .card h3,h2{margin:0 0 6px;font-size:13px;color:var(--mut);font-weight:600}
+.kv{display:flex;align-items:center;gap:12px}.kv b{font-size:26px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-top:14px}
+.pos{color:var(--g)}.neg{color:var(--r)}
+.hb{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:13px}.hb .l{width:92px;flex:none;overflow:hidden;text-overflow:ellipsis}
+.hb .t{flex:1;background:var(--hl);border-radius:6px;height:12px;overflow:hidden}.hb .t i{display:block;height:100%;border-radius:6px;transform-origin:left;animation:gr .8s ease both}
+@keyframes gr{from{transform:scaleX(0)}}.hb .v{width:96px;text-align:right;flex:none}
+.ln{stroke-dasharray:2000;stroke-dashoffset:2000;animation:dr 1.4s ease forwards}@keyframes dr{to{stroke-dashoffset:0}}
+.ins{list-style:none;padding:0;margin:0}.ins li{padding:8px 0;border-bottom:1px solid var(--bd)}.ins li:last-child{border:0}
+button,select,input{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:6px 10px}
+button{cursor:pointer}details{margin-top:14px}summary{cursor:pointer;font-weight:600;padding:10px 14px;background:var(--card);border:1px solid var(--bd);border-radius:12px}
+details[open] summary{border-radius:12px 12px 0 0}details>div{border:1px solid var(--bd);border-top:0;border-radius:0 0 12px 12px;padding:14px;background:var(--card)}
+.f{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}.f label{display:flex;flex-direction:column;font-size:12px;color:var(--mut)}
+.wn{background:#fff4d6;color:#5c4400;border-radius:10px;padding:8px 12px;margin:8px 0;font-size:13px}
+@media (prefers-color-scheme:dark){.wn{background:#3a3318;color:#f3e3a6}}
+.sc{overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{padding:7px 10px;border-bottom:1px solid var(--bd);text-align:right;white-space:nowrap}
+th{color:var(--mut);font-size:12px;cursor:pointer}th:first-child,td:first-child,td.l,th.l{text-align:left}tr[data-id]{cursor:pointer}tr[data-id]:hover{background:var(--hl)}
+.fl{padding:2px 8px;border-radius:99px;background:var(--hl);font-size:12px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.ln{stroke-dashoffset:0}}
+.fbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;position:sticky;top:8px;z-index:5}.fbar label{display:flex;align-items:center;gap:6px}.fbar button{padding:4px 10px;border-radius:99px}.fbar button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.dlb{background:var(--ac)!important;color:#fff!important;border-color:var(--ac)!important;font-weight:600}
+</style></head>
+<body>
+<div class="top"><div class="in"><span class="live"><i></i> Live – updates instantly</span><h1>MT5 Client P&amp;L Analyzer</h1><p>Drop your MT5 history file and see how the client is doing in plain English.</p></div></div>
+<div class="w">
+<div class="card drop" id="dz"><div class="big">📂</div><b>Drop ReportHistory-*.xlsx here</b><div class="m">or click to choose · several clients at once is fine · stays in your browser</div><input type="file" id="f" accept=".xlsx,.xls" multiple hidden><div id="msg" class="s" style="margin-top:8px"></div></div>
+<div id="app" hidden>
+<div class="tabs" id="tabs"></div>
+<div class="card fbar" id="fbar"><b>📅 Date range</b><label>From <input type="date" id="d1"></label><label>To <input type="date" id="d2"></label><span id="pre"><button data-p="all">All time</button> <button data-p="1">Last day</button> <button data-p="7">Last 7 days</button> <button data-p="30">Last 30 days</button> <button data-p="m">This month</button></span><span class="s" id="fcnt"></span></div>
+<div class="card hero" id="hero"></div>
+<div class="grid" id="cards"></div>
+<div class="card" id="costs" style="margin-top:14px"></div>
+<div class="two"><div class="card" id="riskc"></div><div class="card" id="patc"></div></div>
+<div class="card" style="margin-top:14px"><h2>Equity curve &amp; drawdown from peak</h2><div id="curve"></div></div>
+<div class="two"><div class="card"><h2>Profit / loss per day</h2><div id="days"></div></div><div class="card"><h2>What this means</h2><ul class="ins" id="ins"></ul></div></div>
+<div class="two"><div class="card"><h2>Fast trades vs normal trades</h2><div id="scalp"></div></div><div class="card"><h2>☠ Toxic trades</h2><div id="tox"></div></div></div>
+<div class="two"><div class="card"><h2>Result by symbol</h2><div id="syms"></div></div><div class="card"><h2>Result by how long trades were held</h2><div id="hold"></div></div></div>
+<div class="card" id="timec" style="margin-top:14px"></div>
+<div class="card" id="cmpp" style="margin-top:14px"><h2>🔁 Compare two periods <span class="s">(uses the selected client, independent of the main date range)</span></h2><div class="f"><label>Period A from<input type="date" id="a1"></label><label>Period A to<input type="date" id="a2"></label><label>Period B from<input type="date" id="b1"></label><label>Period B to<input type="date" id="b2"></label></div><div id="cmpr" class="sc" style="margin-top:10px"></div></div>
+<div class="card" id="cashc" style="margin-top:14px"></div>
+<div class="card" id="mt5c" style="margin-top:14px"></div>
+<div class="card" id="cmpc" style="margin-top:14px"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px"><h2 style="margin:0">All clients – click one to open it</h2><button class="dlb" id="xa">⬇ Download all clients (Excel)</button></div><div class="sc" id="tc"></div></div>
+<details><summary>📋 Trades list (with date)</summary><div><div class="sc" style="max-height:420px;overflow:auto" id="tl"></div></div></details>
+<details id="calc"><summary>🧮 Net P&amp;L with your equity formula</summary><div><div id="dk"></div></div></details>
+<details><summary>⚙️ Settings</summary><div><div class="f">
+<label>Fast trade = held up to (sec)<input type="number" id="thr" value="300"></label>
+<label>Toxic = winning trade held up to (sec)<input type="number" id="tox_s" value="60"></label>
+<label>Min trades before flagging<input type="number" id="mn" value="10"></label>
+<label>Scalper if fast trades ≥ (%)<input type="number" id="sp" value="50"></label>
+<label>&nbsp;<button id="ex">Export clients CSV</button></label></div></div></details>
+</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script id="core">
+function N(v){if(typeof v==='number')return v;if(v==null)return 0;var x=parseFloat(String(v).replace(/[\s,]/g,''));return isNaN(x)?0:x}
+function PU(s){var m=typeof s==='string'&&s.match(/^(\d{4})[.\-](\d\d)[.\-](\d\d)[ T](\d\d):(\d\d)(?::(\d\d))?/);return m?Date.UTC(+m[1],m[2]-1,+m[3],+m[4],+m[5],+(m[6]||0)):null}
+function aft(r,j){for(var k=j+1;k<r.length;k++)if(r[k]!=null&&r[k]!=='')return r[k];return null}
+function ixm(h){var o={};(h||[]).forEach(function(c,j){if(c==null||c==='')return;c=String(c).trim();(o[c]=o[c]||[]).push(j)});return o}
+function g1(r,ix,k,n){var j=ix[k]&&ix[k][n||0];return j==null?null:r[j]}
+function parse(a,fname){
+ var mk={},M={name:'',acc:'',cur:'',period:''},S={};
+ a.forEach(function(r,i){var c=String(r[0]==null?'':r[0]).trim();
+  if(/^(Positions|Orders|Deals|Results)$/.test(c)&&mk[c]==null)mk[c]=i;
+  if(c==='Name:')M.name=aft(r,0)||'';
+  if(c==='Account:'){var v=String(aft(r,0)||'');M.acc=v.split(' ')[0];M.cur=(v.match(/\((\w+)/)||[])[1]||''}
+  if(c==='Period:')M.period=aft(r,0)||'';
+  if(mk.Deals!=null&&i>mk.Deals)r.forEach(function(x,j){if(typeof x==='string'&&/:$/.test(x.trim())&&S[x.trim()]==null){var v=aft(r,j);if(v!=null)S[x.trim()]=v}})});
+ if(mk.Positions==null)return null;
+ var en=[mk.Orders,mk.Deals,mk.Results].filter(function(x){return x!=null&&x>mk.Positions}),pe=en.length?Math.min.apply(null,en):a.length,px=ixm(a[mk.Positions+1]),T=[],i,r,ty;
+ for(i=mk.Positions+2;i<pe;i++){r=a[i];ty=String(g1(r,px,'Type')||'').toLowerCase();if(ty!=='buy'&&ty!=='sell')continue;
+  var ot=g1(r,px,'Time',0),ct=g1(r,px,'Time',1),o=PU(ot),c=PU(ct);
+  T.push({sy:String(g1(r,px,'Symbol')||'').replace(/\.[a-z]{1,3}$/i,''),ty:ty,v:N(g1(r,px,'Volume')),id:g1(r,px,'Position'),pr:N(g1(r,px,'Profit')),cm:N(g1(r,px,'Commission')),sw:N(g1(r,px,'Swap')),fe:N(g1(r,px,'Fee')),op:g1(r,px,'Price',0),cp:g1(r,px,'Price',1),
+   net:N(g1(r,px,'Profit'))+N(g1(r,px,'Commission'))+N(g1(r,px,'Swap'))+N(g1(r,px,'Fee')),
+   ot:o,ct:c,dur:o!=null&&c!=null?Math.round((c-o)/1000):null,day:String(ct||ot||'(no date)').slice(0,10).replace(/\./g,'-'),sc:false})}
+ var cs={dep:0,wd:0,cin:0,cout:0,add:0},ev=[];
+ if(mk.Deals!=null){var dx=ixm(a[mk.Deals+1]);for(i=mk.Deals+2;i<a.length;i++){r=a[i];ty=String(g1(r,dx,'Type')||'').toLowerCase();var id=g1(r,dx,'Deal');
+  if(!ty||id==null||id===''||ty==='buy'||ty==='sell')continue;var v=N(g1(r,dx,'Profit'));
+  var lb;if(ty==='balance'){if(v>=0){cs.dep+=v;lb='Deposit'}else{cs.wd-=v;lb='Withdrawal'}}else if(ty==='credit'){if(v>=0){cs.cin+=v;lb='Credit In'}else{cs.cout-=v;lb='Credit Out'}}else{cs.add+=v;lb='Additional ('+ty+')'}var tm=String(g1(r,dx,'Time')||'');ev.push({day:tm.slice(0,10).replace(/\./g,'-'),tm:tm,type:lb,v:v,cm:String(g1(r,dx,'Comment')||''),bal:g1(r,dx,'Balance')})}}
+ return{id:M.acc||fname,name:M.name,cur:M.cur,period:M.period,file:fname,T:T,S:S,cs:cs,ev:ev,
+  I:{open:0,close:N(S['Equity:']),dep:cs.dep,cin:cs.cin,cout:cs.cout,add:cs.add,wd:cs.wd}}}
+function eqn(I){return I.close-I.open-I.dep-I.cin-I.add+I.wd+I.cout}
+function stat(x){
+ var s={cpr:0,ccm:0,csw:0,cfe:0,tn:0,tnet:0,dwS:0,dwN:0,dlS:0,dlN:0,n:x.length,w:0,l:0,gp:0,gl:0,net:0,vol:0,sn:0,snet:0,sw:0,sgp:0,sgl:0,dur:0,dn:0,mw:0,ml:0};
+ x.forEach(function(t){s.net+=t.net;s.vol+=t.v;s.cpr+=t.pr||0;s.ccm+=t.cm||0;s.csw+=t.sw||0;s.cfe+=t.fe||0;if(t.tx){s.tn++;s.tnet+=t.net}if(t.dur!=null){if(t.net>0){s.dwS+=t.dur;s.dwN++}else if(t.net<0){s.dlS+=t.dur;s.dlN++}}
+  if(t.net>0){s.w++;s.gp+=t.net;if(t.net>s.mw)s.mw=t.net}else if(t.net<0){s.l++;s.gl+=t.net;if(t.net<s.ml)s.ml=t.net}
+  if(t.dur!=null){s.dur+=t.dur;s.dn++}
+  if(t.sc){s.sn++;s.snet+=t.net;if(t.net>0){s.sw++;s.sgp+=t.net}else if(t.net<0)s.sgl+=t.net}});
+ s.wr=s.n?s.w/s.n:0;s.pf=s.gl?s.gp/-s.gl:(s.gp>0?Infinity:0);s.aw=s.w?s.gp/s.w:0;s.al=s.l?s.gl/s.l:0;
+ s.po=s.al?s.aw/-s.al:0;s.ex=s.n?s.net/s.n:0;s.ad=s.dn?s.dur/s.dn:0;s.sp=s.n?s.sn/s.n:0;
+ s.swr=s.sn?s.sw/s.sn:0;s.spf=s.sgl?s.sgp/-s.sgl:(s.sgp>0?Infinity:0);s.br=-s.net;s.dw=s.dwN?s.dwS/s.dwN:0;s.dl=s.dlN?s.dlS/s.dlN:0;s.tp=s.n?s.tn/s.n:0;s.tsh=s.gp?s.tnet/s.gp:0;return s}
+
+function med(T){var d=T.filter(function(t){return t.dur!=null}).map(function(t){return t.dur}).sort(function(a,b){return a-b}),n=d.length;return n?(n%2?d[(n-1)/2]:(d[n/2-1]+d[n/2])/2):0}
+function fd(s){s=Math.round(s);if(s<60)return s+'s';if(s<3600)return Math.floor(s/60)+'m '+s%60+'s';if(s<86400)return Math.floor(s/3600)+'h '+Math.floor(s%3600/60)+'m';return Math.floor(s/86400)+'d '+Math.floor(s%86400/3600)+'h'}
+function pattern(T){
+ var A=T.filter(function(t){return t.ot!=null&&t.ct!=null}).sort(function(a,b){return a.ot-b.ot}),n=A.length,R={score:0,n:n,mc:0,ml:0,su:0,sd:0,sup:0,st:0,stp:0,ms:0,tail:0,verdict:'Not enough data',notes:[]};
+ if(!n)return R;
+ var ev=[];A.forEach(function(t){ev.push([t.ot,1,t.v]);ev.push([t.ct,-1,t.v])});ev.sort(function(a,b){return a[0]-b[0]||a[1]-b[1]});
+ var c=0,l=0;ev.forEach(function(e){c+=e[1];l+=e[1]*e[2];if(c>R.mc)R.mc=c;if(l>R.ml)R.ml=l});
+ var C=A.slice().sort(function(a,b){return a.ct-b.ct}),j=-1;
+ A.forEach(function(t){while(j+1<C.length&&C[j+1].ct<=t.ot)j++;if(j>=0&&C[j].net<0){R.sd++;if(t.v>=C[j].v*1.5)R.su++}});
+ R.sup=R.sd?R.su/R.sd:0;
+ var act=[];A.forEach(function(t){act=act.filter(function(o){return o.ct>t.ot});var k=act.filter(function(o){return o.sy===t.sy&&o.ty===t.ty}).length;if(k>=2)R.st++;if(k+1>R.ms)R.ms=k+1;act.push(t)});
+ R.stp=R.st/n;
+ var w=0,wn=0,lo=0,ls=0,ln=0;T.forEach(function(t){if(t.net>0){w+=t.net;wn++}else if(t.net<0){ls+=t.net;ln++}if(t.net<lo)lo=t.net});
+ var aw=wn?w/wn:0,al=ln?-ls/ln:0,wr=T.length?wn/T.length:0;R.tail=aw?-lo/aw:0;
+ R.score=40*Math.min(1,R.sup/.3)+30*Math.min(1,R.stp/.4)+20*Math.min(1,Math.max(0,R.tail-3)/7)+((wr>=.65&&al&&aw/al<.5)?10:0);
+ R.verdict=R.score>=60?'Likely martingale / grid':R.score>=35?'Possible martingale / grid':'No clear martingale / grid pattern';
+ if(R.sd&&R.sup>=.1)R.notes.push('Opens at least 1.5× bigger lots right after a losing trade in '+Math.round(R.sup*100)+'% of cases ('+R.su+' of '+R.sd+').');
+ if(R.st)R.notes.push(R.st+' trades ('+Math.round(R.stp*100)+'%) were opened while 2+ same-direction positions on the same symbol were already open (max stack '+R.ms+').');
+ if(R.tail>=5)R.notes.push('Biggest loss is '+R.tail.toFixed(1)+'× the average win – a few large losers can erase many small wins.');
+ if(wr>=.65&&al&&aw/al<.5)R.notes.push('High win rate ('+Math.round(wr*100)+'%) with a low payoff ratio ('+(aw/al).toFixed(2)+') – typical of grid / averaging strategies.');
+ if(!R.notes.length)R.notes.push('No strong sign of lot escalation or position stacking.');
+ return R}
+function risk(s,pt,mh){var P=[],sc=0;
+ function add(l,v,m){v=Math.max(0,Math.min(m,v));P.push([l,v,m]);sc+=v}
+ add('Toxic profit share',s.tsh/.5*25,25);add('Scalping share',s.sp/.7*15,15);add('Profit factor above 1',s.pf===Infinity?20:(s.pf-1)*20,20);
+ add('Martingale / grid pattern',pt.score/100*20,20);add('Very short typical hold',(900-mh)/900*10,10);add('Very high win rate',(s.wr-.5)/.4*10,10);
+ return{score:sc,parts:P}}
+function wkS(day){var d=new Date(day+'T00:00:00Z');d.setUTCDate(d.getUTCDate()-(d.getUTCDay()+6)%7);return d.toISOString().slice(0,10)}
+function dd(T,base){
+ var A=T.map(function(t,i){return[t.ct==null?1e18:t.ct,i,t]}).sort(function(a,b){return a[0]-b[0]||a[1]-b[1]}).map(function(a){return a[2]});
+ var e=base,pk=base,E=[base],P=[base],mdd=0,mddp=0,cw=0,cwv=0,cl=0,clv=0,bw=0,bwv=0,bl=0,blv=0,mt=0;
+ A.forEach(function(t,i){e+=t.net;if(e>pk)pk=e;E.push(e);P.push(pk);var d=pk-e;if(d>mdd){mdd=d;mddp=pk?d/pk:0;mt=i+1}
+  if(t.net>0){cw++;cwv+=t.net;cl=0;clv=0;if(cw>bw){bw=cw;bwv=cwv}}else if(t.net<0){cl++;clv+=t.net;cw=0;cwv=0;if(cl>bl){bl=cl;blv=clv}}});
+ return{E:E,P:P,A:A,mdd:mdd,mddp:mddp,cur:pk-e,curp:pk?(pk-e)/pk:0,bw:bw,bwv:bwv,bl:bl,blv:blv}}
+</script>
+<script>
+var $=function(i){return document.getElementById(i)},CL=[],SEL='*',SORT={k:'rk',d:-1},THR=300;
+function fm(v){return v.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}
+function cl(v){return v>0?'pos':v<0?'neg':''}
+function sg(v){return'<span class="'+cl(v)+'">'+(v>0?'+':'')+fm(v)+'</span>'}
+function pf(v){return v===Infinity?'∞':fm(v)}
+function pc(v){return(v*100).toFixed(0)+'%'}
+function pc1(v){return(v*100).toFixed(1)+'%'}
+function grp(T,k){var g={};T.forEach(function(t){(g[t[k]]=g[t[k]]||[]).push(t)});return g}
+function saveFile(name,data,mime){
+ return(window.claude&&window.claude.use?window.claude.use('downloads'):Promise.resolve(null)).then(function(d){
+  if(d)return d.save({filename:name,data:data}).catch(function(e){if(!(e&&e.code==='declined'))throw e});
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:mime||'application/octet-stream'}));a.download=name;a.click()
+ }).catch(function(e){alert('Download failed: '+(e&&e.message||e))})}
+function r2(v){return Math.round(v*100)/100}
+function fdt(ms){return ms==null?'':new Date(ms).toISOString().slice(0,19).replace('T',' ')}
+function scopeT(){var c=CL.filter(function(x){return x.id===SEL})[0];return{c:c,T:c?c.F:[].concat.apply([],CL.map(function(x){return x.F}))}}
+function base(c){return c.I.open+c.I.dep+c.I.cin}
+function ring(p,col){return'<svg viewBox="0 0 36 36" width="64" height="64"><circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--hl)" stroke-width="4"/><circle cx="18" cy="18" r="15.9" fill="none" stroke="'+col+'" stroke-width="4" stroke-linecap="round" stroke-dasharray="'+Math.max(0,Math.min(100,p*100))+' 100" transform="rotate(-90 18 18)"/></svg>'}
+function hb(rows,fmt){var mx=Math.max.apply(null,rows.map(function(r){return Math.abs(r.v)}))||1;
+ return rows.map(function(r){return'<div class="hb"><span class="l" title="'+r.l+'">'+r.l+'</span><span class="t"><i style="width:'+Math.max(3,Math.abs(r.v)/mx*100)+'%;background:var(--'+(r.v>=0?'g':'r')+')"></i></span><span class="v">'+(fmt?fmt(r):sg(r.v))+'</span></div>'}).join('')||'<span class="m">No data</span>'}
+function eqChart(D,b){var e=D.E,p=D.P,n=e.length,W=1040,H=230,mn=Math.min.apply(null,e),mx=Math.max.apply(null,p),r=(mx-mn)||1,X=function(i){return i/(n-1||1)*W},Y=function(v){return H-14-(v-mn)/r*(H-28)};
+ var pt=function(a){return a.map(function(v,i){return X(i).toFixed(1)+' '+Y(v).toFixed(1)})},ep=pt(e),pp=pt(p),col=e[n-1]>=e[0]?'var(--g)':'var(--r)';
+ var area='M'+ep.join(' L')+' L'+pp.slice().reverse().join(' L')+'Z',md=Math.max.apply(null,e.map(function(v,i){return p[i]-v}))||1,H2=80;
+ var ddp='M0 0 '+e.map(function(v,i){return'L'+X(i).toFixed(1)+' '+((p[i]-v)/md*(H2-10)).toFixed(1)}).join(' ')+' L'+W+' 0Z';
+ return'<svg viewBox="0 0 '+W+' '+H+'" width="100%"><path d="'+area+'" fill="var(--r)" opacity=".18"/><path d="M'+pp.join(' L')+'" fill="none" stroke="var(--mut)" stroke-dasharray="4 4" stroke-width="1.5"/><path class="ln" pathLength="2000" d="M'+ep.join(' L')+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linejoin="round"/></svg>'+
+ '<div class="s">Solid line = equity (balance) after each closed trade'+(b?' starting at '+fm(b):' (starting from 0 – type opening equity / credit in the calculator below for a real balance)')+'. Dashed = highest point so far. <span class="neg">Red area = drawdown from peak.</span></div>'+
+ '<svg viewBox="0 0 '+W+' '+H2+'" width="100%" style="margin-top:6px"><line x1="0" x2="'+W+'" y1="0" y2="0" stroke="var(--bd)"/><path d="'+ddp+'" fill="var(--r)" opacity=".55"/></svg><div class="s">Drawdown over time (deeper = further below the peak). Worst: <b class="neg">-'+fm(D.mdd)+'</b>'+(b?' ('+pc1(D.mddp)+' of peak)':'')+'.</div>'}
+function dbars(dy){if(!dy.length)return'<span class="m">No data</span>';var mx=Math.max.apply(null,dy.map(function(q){return Math.abs(q.net)}))||1,W=520,H=170,bw=W/dy.length,z=H/2;
+ return'<svg viewBox="0 0 '+W+' '+H+'" width="100%"><line x1="0" x2="'+W+'" y1="'+z+'" y2="'+z+'" stroke="var(--bd)"/>'+dy.map(function(q,i){var h=Math.abs(q.net)/mx*(z-8);return'<rect x="'+(i*bw+bw*.12)+'" width="'+bw*.76+'" y="'+(q.net>=0?z-h:z)+'" height="'+Math.max(1,h)+'" rx="3" fill="var(--'+(q.net>=0?'g':'r')+')"><title>'+q.k+': '+fm(q.net)+' ('+q.n+' trades)</title></rect>'}).join('')+'</svg><div class="s">Green = profit day, red = losing day. Hover a bar for details.</div>'}
+function load(files){var done=0,bad=[],list=Array.prototype.slice.call(files);
+ list.forEach(function(file){var rd=new FileReader();
+  rd.onload=function(e){try{var wb=XLSX.read(e.target.result,{type:'array'}),a=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:null,raw:true}),c=parse(a,file.name);
+   if(c){CL=CL.filter(function(x){return x.id!==c.id});CL.push(c)}else bad.push(file.name)}catch(x){bad.push(file.name)}
+   if(++done===list.length){$('msg').textContent='✓ '+CL.length+' client(s) loaded'+(bad.length?' – not an MT5 report: '+bad.join(', '):'');if(CL.length){$('app').hidden=false;setDates('all');setCmp();if(CL.length===1)SEL=CL[0].id;else if(!CL.some(function(c){return c.id===SEL}))SEL='*';run()}}};
+  rd.readAsArrayBuffer(file)})}
+function run(){THR=+$('thr').value||300;var TXS=+$('tox_s').value||60,mn=+$('mn').value||0,spt=(+$('sp').value||50)/100,f1=$('d1').value,f2=$('d2').value,tot=0,inr=0;
+ CL.forEach(function(c){c.F=c.T.filter(function(t){return(!f1||t.day>=f1)&&(!f2||t.day<=f2)});tot+=c.T.length;inr+=c.F.length;c.T.forEach(function(t){t.cid=c.id;t.sc=t.dur!=null&&t.dur<=THR;t.tx=t.net>0&&t.dur!=null&&t.dur<=TXS});var s=stat(c.F),D=dd(c.F,base(c));c.s=s;s.id=c.id;s.name=c.name;s.eqn=eqn(c.I);s.mdd=-D.mdd;s.mddp=D.mddp;s.mh=med(c.F);c.pt=pattern(c.F);s.pm=c.pt.score;s.rk=risk(s,c.pt,s.mh).score;
+  s.flag=s.n<mn?'Too few trades':(s.net>0&&s.tsh>=.3)?'☠ Toxic – review':(s.sp>=spt&&s.net>0)?'⚠ Profitable scalper':(s.net>0&&s.pf>=1.5&&s.wr>=.6)?'👀 Profitable – watch':s.sp>=spt?'Scalper':'OK'});
+ $('tabs').innerHTML=(CL.length>1?[['*','All clients']]:[]).concat(CL.map(function(c){return[c.id,c.id+(c.name?' · '+c.name:'')]})).map(function(t){return'<button class="tab'+(t[0]===SEL?' on':'')+'" data-id="'+t[0]+'">'+t[1]+'</button>'}).join('');
+ document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){SEL=b.dataset.id;run()}});
+ $('fcnt').textContent=inr+' of '+tot+' trades in range (by close date)';view();renderCalc()}
+function view(){
+ var c=CL.filter(function(x){return x.id===SEL})[0],T=c?c.F:[].concat.apply([],CL.map(function(x){return x.F})),s=stat(T),up=s.net>=0,b=c?base(c):CL.reduce(function(a,x){return a+base(x)},0),D=dd(T,b),TXS=+$('tox_s').value||60,mh=med(T);
+ var who=c?(c.name||c.id):CL.length+' clients';
+ $('hero').innerHTML='<div><div class="s">'+who+' · closed '+($('d1').value||'start')+' → '+($('d2').value||'end')+'</div><div class="n '+cl(s.net)+'">'+sg(s.net)+'</div><div class="s">Trading result on '+s.n+' closed trades</div></div>'+
+ '<div><span class="pill '+(up?'g':'r')+'">Client is '+(up?'UP':'DOWN')+'</span> <span class="pill '+(up?'r':'g')+'">Broker (B-book) is '+(up?'DOWN':'UP')+' '+fm(Math.abs(s.net))+'</span><div class="s" style="margin-top:6px">Client profit = broker loss, and the other way round.</div><div style="margin-top:8px"><button class="dlb" id="rp">⬇ Client report (HTML → print / PDF)</button></div></div>';
+ $('cards').innerHTML=
+ '<div class="card"><h3>Win rate</h3><div class="kv">'+ring(s.wr,'var(--ac)')+'<div><b>'+pc(s.wr)+'</b><div class="s">'+s.w+' won · '+s.l+' lost</div></div></div></div>'+
+ '<div class="card"><h3>Profit factor</h3><div class="kv"><b class="'+(s.pf>=1?'pos':'neg')+'">'+pf(s.pf)+'</b><div class="s">Total profit ÷ total loss.<br>Above 1 = profitable.</div></div></div>'+
+ '<div class="card"><h3>Average win</h3><b class="pos" style="font-size:26px">'+fm(s.aw)+'</b><div class="s">per winning trade</div></div>'+
+ '<div class="card"><h3>Average loss</h3><b class="neg" style="font-size:26px">'+fm(s.al)+'</b><div class="s">per losing trade · payoff ratio '+fm(s.po)+'</div></div>'+
+ '<div class="card"><h3>Max win / Max loss</h3><div class="kv"><div><b class="pos">'+fm(s.mw)+'</b><div class="s">biggest win</div></div><div><b class="neg">'+fm(s.ml)+'</b><div class="s">biggest loss</div></div></div></div>'+
+ '<div class="card"><h3>Max drawdown from peak</h3><b class="neg" style="font-size:26px">-'+fm(D.mdd)+'</b><div class="s">'+(b?pc1(D.mddp)+' of peak · ':'')+'now '+fm(D.cur)+' below peak</div></div>'+
+ '<div class="card"><h3>Average hold time</h3><b style="font-size:26px">'+fd(s.ad)+'</b><div class="s">median '+fd(mh)+' · winners '+fd(s.dw)+' · losers '+fd(s.dl)+'</div></div>'+
+ '<div class="card"><h3>☠ Toxic trades</h3><div class="kv"><b class="'+(s.tsh>=.3?'neg':'')+'">'+s.tn+'</b><div class="s">'+pc(s.tp)+' of trades · '+sg(s.tnet)+'<br>= '+pc(s.tsh)+' of all profit</div></div></div>'+
+ '<div class="card"><h3>Fast trades (scalps)</h3><div class="kv">'+ring(s.sp,'#f59e0b')+'<div><b>'+pc(s.sp)+'</b><div class="s">'+s.sn+' trades ≤ '+THR+'s · '+sg(s.snet)+'</div></div></div></div>'+
+ '<div class="card"><h3>Streaks</h3><div class="s">Longest win streak: <b class="pos">'+D.bw+'</b> trades ('+sg(D.bwv)+')<br>Longest loss streak: <b class="neg">'+D.bl+'</b> trades ('+sg(D.blv)+')</div></div>'+
+ '<div class="card"><h3>Volume traded</h3><b style="font-size:26px">'+fm(s.vol)+'</b><div class="s">lots</div></div>';
+ var gd=grp(T,'day'),dy=Object.keys(gd).sort().map(function(k){var q=stat(gd[k]);q.k=k;return q}),gs=grp(T,'sy'),sy=Object.keys(gs).map(function(k){var q=stat(gs[k]);q.k=k;return q}).sort(function(a,b){return b.net-a.net});
+ $('curve').innerHTML=s.n?eqChart(D,b):'<span class="m">No trades</span>';$('days').innerHTML=dbars(dy);
+ $('syms').innerHTML=hb(sy.map(function(q){return{l:q.k,v:q.net,n:q.n}}),function(r){return sg(r.v)+' <span class="s">('+r.n+')</span>'});
+ var bk=[[0,10,'under 10 sec'],[10,30,'10–30 sec'],[30,60,'30–60 sec'],[60,300,'1–5 min'],[300,900,'5–15 min'],[900,3600,'15–60 min'],[3600,1e12,'over 1 hour']],bq=bk.map(function(x){var q=stat(T.filter(function(t){return t.dur!=null&&t.dur>=x[0]&&t.dur<x[1]}));return{l:x[2],v:q.net,n:q.n}});
+ $('hold').innerHTML=hb(bq,function(r){return sg(r.v)+' <span class="s">('+r.n+')</span>'});
+ var Sc=stat(T.filter(function(t){return t.sc})),Ns=stat(T.filter(function(t){return!t.sc}));
+ $('scalp').innerHTML='<div class="two" style="margin:0;grid-template-columns:1fr 1fr"><div><div class="s">⚡ Fast (≤ '+THR+'s)</div><b style="font-size:22px">'+sg(Sc.net)+'</b><div class="s">'+Sc.n+' trades · win '+pc(Sc.wr)+' · PF '+pf(Sc.pf)+'</div></div><div><div class="s">🐢 Normal</div><b style="font-size:22px">'+sg(Ns.net)+'</b><div class="s">'+Ns.n+' trades · win '+pc(Ns.wr)+' · PF '+pf(Ns.pf)+'</div></div></div>'+
+ '<div class="s" style="margin:8px 0">'+(Sc.net>Ns.net?'Most of the profit comes from fast trades.':'Normal-length trades do better than fast trades.')+'</div><button class="dlb" id="xs">⬇ Download scalping report (Excel)</button><div class="s" style="margin-top:4px">Uses the selected client and date range above.</div>';
+ var tg=grp(T.filter(function(t){return t.tx}),'sy'),tr=Object.keys(tg).map(function(k){var q=stat(tg[k]);return{l:k,v:q.net,n:q.n}}).sort(function(a,b){return b.v-a.v});
+ $('tox').innerHTML='<div class="s" style="margin-bottom:6px"><b>Toxic trade</b> = a winning trade closed within '+TXS+' seconds (typical of latency / quick-scalp flow). Change the seconds in Settings.</div><div class="kv"><b style="font-size:24px">'+s.tn+'</b><div class="s">toxic trades · '+pc(s.tp)+' of all trades<br>made '+sg(s.tnet)+' = <b>'+pc(s.tsh)+'</b> of gross profit</div></div>'+(tr.length?'<div style="margin-top:8px">'+hb(tr,function(r){return sg(r.v)+' <span class="s">('+r.n+')</span>'})+'</div>':'');
+ var L=[];if(s.n){
+  L.push(s.pf>=1.5?['✅','Strong: the client makes '+fm(s.pf)+'× more than they lose.']:s.pf>=1?['⚠️','Barely profitable: profit factor '+pf(s.pf)+'. A small edge that can flip quickly.']:['❌','Losing overall: profit factor '+pf(s.pf)+' (below 1).']);
+  if(s.wr>=.6&&s.po<.8)L.push(['⚠️','Wins often ('+pc(s.wr)+') but losses are bigger: avg loss '+fm(-s.al)+' vs avg win '+fm(s.aw)+'. A few big losers can wipe out many small wins.']);
+  if(s.tsh>=.3)L.push(['☠','Toxic flow: '+pc(s.tsh)+' of the client’s profit came from winning trades closed within '+TXS+'s.']);
+  L.push(['📉','Max drawdown '+fm(D.mdd)+(b?' ('+pc1(D.mddp)+' of peak)':'')+'; currently '+fm(D.cur)+' below the peak.']);
+  L.push([s.sp>=.5?'⚡':'ℹ️',pc(s.sp)+' of trades are fast scalps (≤ '+THR+'s) and they made '+fm(s.snet)+'. Average hold '+fd(s.ad)+' but the typical (median) trade lasts '+fd(mh)+'.']);
+  if(sy.length>1)L.push(['📊','Best symbol '+sy[0].k+' ('+sg(sy[0].net)+'), weakest '+sy[sy.length-1].k+' ('+sg(sy[sy.length-1].net)+').']);
+  if(dy.length){var bd=dy.slice().sort(function(a,b){return b.net-a.net});L.push(['📅','Best day '+bd[0].k+' ('+sg(bd[0].net)+'), worst day '+bd[bd.length-1].k+' ('+sg(bd[bd.length-1].net)+').'])}}
+ $('ins').innerHTML=L.map(function(x){return'<li>'+x[0]+' '+x[1]+'</li>'}).join('');
+ $('cmpc').hidden=CL.length<2;tc();tlist(T,!c);$('costs').innerHTML=costsHtml(s,T);cashView();var xs=$('xs');if(xs)xs.onclick=exportScalp;extra(c,s,T,mh)}
+var COLS=[['id','Account'],['name','Name'],['n','Trades',0],['wr','Win %',3],['net','Trading P&L',1],['pf','PF',2],['br','Broker (B-book)',1],['aw','Avg win',1],['al','Avg loss',1],['mw','Max win',1],['ml','Max loss',1],['mdd','Max drawdown',1],['rk','Risk score',7],['pm','Martingale / grid',7],['ccm','Commission',1],['csw','Swap',1],['ad','Avg hold',6],['tp','Toxic %',3],['sp','Scalp %',3],['eqn','Equity-formula Net P&L',1],['flag','Flag']];
+function cv(v,f){return f===4?fm(v):f===7?'<b class="'+(v>=70?'neg':v>=40?'':'pos')+'">'+Math.round(v)+'</b>':f===0?v:f===1?sg(v):f===2?pf(v):f===3?pc(v):f===6?fd(v):v}
+function tc(){var rows=CL.map(function(c){c.s.br=-c.s.net;return c.s}).sort(function(a,b){var x=a[SORT.k],y=b[SORT.k];return SORT.d*(x>y?1:x<y?-1:0)});
+ $('tc').innerHTML='<table><tr>'+COLS.map(function(c){return'<th data-k="'+c[0]+'">'+c[1]+(SORT.k===c[0]?(SORT.d>0?' ▲':' ▼'):'')+'</th>'}).join('')+'</tr>'+rows.map(function(r){return'<tr data-id="'+r.id+'">'+COLS.map(function(c){var v=r[c[0]];return'<td>'+(c[0]==='flag'?'<span class="fl">'+v+'</span>':c.length<3?v:cv(v,c[2]))+'</td>'}).join('')+'</tr>'}).join('')+'</table>';
+ $('tc').querySelectorAll('th').forEach(function(h){h.onclick=function(){var k=h.dataset.k;SORT=SORT.k===k?{k:k,d:-SORT.d}:{k:k,d:-1};tc()}});
+ $('tc').querySelectorAll('tr[data-id]').forEach(function(r){r.onclick=function(){SEL=r.dataset.id;run();window.scrollTo({top:0,behavior:'smooth'})}})}
+function renderCalc(){var c=CL.filter(function(x){return x.id===SEL})[0];
+ if(!c){$('dk').innerHTML='<span class="m">Pick one client above to use the equity formula.</span>';return}
+ var I=c.I;$('dk').innerHTML='<div class="s" style="margin-bottom:8px">Net P&amp;L = (Closing equity − Opening equity) − Deposit − Credit In − Additional + Withdrawal + Credit Out. Opening equity is not in the MT5 report – type it in. Credit Out and Withdrawal are positive numbers; Additional keeps its sign. Opening equity + Deposit + Credit In is also used as the starting balance for the equity curve and drawdown %. Note: deposit, credit and closing equity come from the whole report – for a shorter date range, enter that period’s opening/closing equity and cash movements yourself.</div><div class="f">'+
+ [['open','Opening equity'],['close','Closing equity'],['dep','Deposit'],['cin','Credit In'],['cout','Credit Out'],['add','Additional (bonus)'],['wd','Withdrawal']].map(function(f){return'<label>'+f[1]+'<input type="number" step="any" data-f="'+f[0]+'" value="'+I[f[0]]+'"></label>'}).join('')+'</div><div id="cres"></div>';
+ $('dk').querySelectorAll('input').forEach(function(i){i.oninput=function(){I[i.dataset.f]=+i.value||0;c.s.eqn=eqn(I);var D=dd(c.F,base(c));c.s.mdd=-D.mdd;c.s.mddp=D.mddp;cres(c);view()}});cres(c)}
+function cres(c){var I=c.I,s=c.s,S=c.S,e=eqn(I),mt=S['Total Net Profit:'],cf=S['Credit Facility:'],W=[];
+ if(mt!=null)W.push(Math.abs(N(mt)-s.net)<=.01?'✓ Matches the MT5 report’s Total Net Profit ('+fm(N(mt))+').':'Closed-trade total ('+fm(s.net)+') differs from MT5 Total Net Profit ('+fm(N(mt))+').');
+ if(cf!=null&&Math.abs(N(cf)-(I.cin-I.cout))>.01)W.push('Report shows Credit Facility '+fm(N(cf))+' but the Deals list only has net credit '+fm(I.cin-I.cout)+' – some credit/balance operations may be missing from the export.');
+ if(Math.abs(e-s.net)>1)W.push('Equity formula and closed-trade result differ by '+fm(e-s.net)+' (open trades, missing operations, or wrong opening equity).');
+ $('cres').innerHTML='<div class="grid"><div class="card"><h3>Net P&amp;L (equity formula)</h3><b style="font-size:24px">'+sg(e)+'</b></div><div class="card"><h3>Closed-trade P&amp;L</h3><b style="font-size:24px">'+sg(s.net)+'</b></div><div class="card"><h3>Broker result (equity basis)</h3><b style="font-size:24px">'+sg(-e)+'</b><div class="s">Negative Net P&amp;L = broker profit</div></div></div>'+W.map(function(w){return'<div class="wn">'+w+'</div>'}).join('')}
+function pill(sc){return sc>=70?['HIGH','r']:sc>=40?['MEDIUM','']:['LOW','g']}
+function scopeAll(){var c=CL.filter(function(x){return x.id===SEL})[0];return{c:c,T:c?c.T:[].concat.apply([],CL.map(function(x){return x.T}))}}
+function extra(c,s,T,mh){
+ var rp=$('rp'),xa=$('xa');if(rp)rp.onclick=exportReport;if(xa)xa.onclick=exportAll;
+ if(c){var pt=c.pt,rk=risk(s,pt,mh),pl=pill(rk.score);
+  $('riskc').innerHTML='<h2>🎯 Risk score <span class="s">(higher = more risk for the broker – a guide, not a verdict)</span></h2><div class="kv">'+ring(rk.score/100,pl[1]==='r'?'var(--r)':pl[1]==='g'?'var(--g)':'#f59e0b')+'<div><b style="font-size:30px">'+Math.round(rk.score)+'</b> <span class="pill '+pl[1]+'" style="background:var(--hl)">'+pl[0]+'</span></div></div><div style="margin-top:8px">'+rk.parts.map(function(q){return'<div class="hb"><span class="l" style="width:170px">'+q[0]+'</span><span class="t"><i style="width:'+(q[2]?q[1]/q[2]*100:0)+'%;background:var(--ac)"></i></span><span class="v" style="width:60px">'+q[1].toFixed(0)+'/'+q[2]+'</span></div>'}).join('')+'</div>';
+  $('patc').innerHTML='<h2>🔍 Martingale / grid check</h2><div style="font-size:18px;font-weight:700;margin-bottom:6px" class="'+(pt.score>=60?'neg':'')+'">'+pt.verdict+' <span class="s">(score '+Math.round(pt.score)+'/100)</span></div><div class="s">Max open at once: <b>'+pt.mc+'</b> positions · <b>'+fm(pt.ml)+'</b> lots · Lot size-ups after a loss: <b>'+pt.su+'</b> of '+pt.sd+' · Stacked entries: <b>'+pt.st+'</b> (max stack '+pt.ms+') · Biggest loss ÷ avg win: <b>'+pt.tail.toFixed(1)+'×</b></div><ul class="ins">'+pt.notes.map(function(x){return'<li>'+x+'</li>'}).join('')+'</ul>'}
+ else{$('riskc').innerHTML='<h2>🎯 Risk score</h2><div class="m">Select one client above to see its risk score. The clients table below ranks all clients by risk.</div>';$('patc').innerHTML='<h2>🔍 Martingale / grid check</h2><div class="m">Select one client above – this check needs a single account’s trades.</div>'}
+ timeView(T);cmpView();mt5View(c)}
+function vbars(v,lab){var mx=Math.max.apply(null,v.map(Math.abs))||1,W=520,H=150,bw=W/v.length,z=H/2-6;
+ return'<svg viewBox="0 0 '+W+' '+(H+14)+'" width="100%"><line x1="0" x2="'+W+'" y1="'+z+'" y2="'+z+'" stroke="var(--bd)"/>'+v.map(function(x,i){var q=Math.abs(x)/mx*(z-6);return'<rect x="'+(i*bw+bw*.12)+'" width="'+bw*.76+'" y="'+(x>=0?z-q:z)+'" height="'+(x?Math.max(1,q):0)+'" rx="2" fill="var(--'+(x>=0?'g':'r')+')"><title>'+lab[i]+': '+fm(x)+'</title></rect>'+(i%3===0?'<text x="'+(i*bw+bw/2)+'" y="'+(H+10)+'" font-size="9" text-anchor="middle" fill="var(--mut)">'+lab[i]+'</text>':'')}).join('')+'</svg>'}
+function ptab(g,lab){var ks=Object.keys(g).sort();return'<table><tr><th>'+lab+'</th><th>Trades</th><th>Win %</th><th>Net P&amp;L</th><th>PF</th></tr>'+ks.map(function(k){var q=stat(g[k]);return'<tr><td>'+k+'</td><td>'+q.n+'</td><td>'+pc(q.wr)+'</td><td>'+sg(q.net)+'</td><td>'+pf(q.pf)+'</td></tr>'}).join('')+'</table>'}
+function timeView(T){
+ var hr=[],lab=[],i;for(i=0;i<24;i++){hr.push([]);lab.push(('0'+i).slice(-2)+'h')}var dw=[[],[],[],[],[],[],[]],DN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+ T.forEach(function(t){if(t.ot!=null){var d=new Date(t.ot);hr[d.getUTCHours()].push(t);dw[d.getUTCDay()].push(t)}});
+ var hs=hr.map(function(a){return stat(a)}),ds=dw.map(function(a){return stat(a)}),bh=0,bb=0;
+ hs.forEach(function(q,k){if(q.net>hs[bh].net)bh=k;if(q.n>hs[bb].n)bb=k});var wh=0;hs.forEach(function(q,k){if(q.net<hs[wh].net)wh=k});
+ $('timec').innerHTML='<h2>⏰ When does the client trade &amp; win? <span class="s">(hour / weekday by open time, broker server time)</span></h2><div class="two" style="margin:0 0 10px"><div><div class="s">Net P&amp;L by hour</div>'+vbars(hs.map(function(q){return q.net}),lab)+'<div class="s">Best hour <b>'+lab[bh]+'</b> ('+sg(hs[bh].net)+') · worst <b>'+lab[wh]+'</b> ('+sg(hs[wh].net)+') · busiest <b>'+lab[bb]+'</b> ('+hs[bb].n+' trades)</div></div><div><div class="s">Net P&amp;L by weekday</div>'+hb(ds.map(function(q,k){return{l:DN[k],v:q.net,n:q.n}}).filter(function(r){return r.n}),function(r){return sg(r.v)+' <span class="s">('+r.n+')</span>'})+'</div></div>'+
+ '<div class="two" style="margin:0"><div class="sc"><div class="s">Weekly (by close date, week starts Monday)</div>'+ptab(grp(T.map(function(t){return{w:wkS(t.day),net:t.net,v:t.v,dur:t.dur,sc:t.sc,tx:t.tx}}),'w'),'Week from')+'</div><div class="sc"><div class="s">Monthly</div>'+ptab(grp(T.map(function(t){return{m:t.day.slice(0,7),net:t.net,v:t.v,dur:t.dur,sc:t.sc,tx:t.tx}}),'m'),'Month')+'</div></div>'}
+function setCmp(){var b=dayRange()[1];if(!b)return;$('a2').value=b;$('a1').value=addDays(b,-6);$('b2').value=addDays(b,-7);$('b1').value=addDays(b,-13)}
+['a1','a2','b1','b2'].forEach(function(i){$(i).oninput=function(){if(CL.length)cmpView()}});
+function cmpView(){var S=scopeAll(),c=S.c,b=c?base(c):CL.reduce(function(a,x){return a+base(x)},0);
+ function per(x,y){var T=S.T.filter(function(t){return(!x||t.day>=x)&&(!y||t.day<=y)}),s=stat(T);s.dd=dd(T,b).mdd;s.mh=med(T);return s}
+ var A=per($('a1').value,$('a2').value),B=per($('b1').value,$('b2').value);
+ var R=[['Trades','n',0],['Win rate','wr',3],['Net P&L','net',1],['Profit factor','pf',2],['Avg win','aw',1],['Avg loss','al',1],['Biggest loss','ml',1],['Avg hold','ad',6],['Scalp %','sp',3],['Toxic % of trades','tp',3],['Lots','vol',4],['Max drawdown','dd',4]];
+ $('cmpr').innerHTML='<table><tr><th>Metric</th><th>Period A</th><th>Period B</th><th>A − B</th></tr>'+R.map(function(r){var a=A[r[1]],q=B[r[1]],d=a-q,pp=(r[2]===3);return'<tr><td>'+r[0]+'</td><td>'+cv(a,r[2])+'</td><td>'+cv(q,r[2])+'</td><td>'+(isFinite(d)?(d>0?'▲ ':d<0?'▼ ':'')+(r[2]===3?(Math.abs(d)*100).toFixed(1)+' pts':r[2]===6?fd(Math.abs(d)):fm(Math.abs(d))):'')+'</td></tr>'}).join('')+'</table>'}
+function numOf(v){return v==null?null:N(String(v).split('(')[0])}
+function mt5View(c){
+ if(!c){$('mt5c').innerHTML='<h2>✅ Check against the MT5 report</h2><div class="m">Select one client to compare this page’s numbers with the MT5 report’s own Results.</div>';return}
+ var S=c.S,s=stat(c.T),D=dd(c.T,base(c)),pw=numOf(S['Profit Trades (% of total):']),
+ R=[['Total net profit',s.net,numOf(S['Total Net Profit:'])],['Gross profit',s.gp,numOf(S['Gross Profit:'])],['Gross loss',s.gl,numOf(S['Gross Loss:'])],['Profit factor',s.pf,numOf(S['Profit Factor:'])],['Largest profit trade',s.mw,numOf(S['Largest profit trade:'])],['Largest loss trade',s.ml,numOf(S['Largest loss trade:'])],['Total trades',s.n,numOf(S['Total Trades:']),1],['Winning trades',s.w,pw,1],['Average profit trade',s.aw,numOf(S['Average profit trade:'])],['Average loss trade',s.al,numOf(S['Average loss trade:'])],['Max balance drawdown',D.mdd,numOf(S['Balance Drawdown Maximal:'])]];
+ $('mt5c').innerHTML='<h2>✅ Check against the MT5 report <span class="s">(whole report, ignores the date filter)</span></h2><div class="sc"><table><tr><th>Metric</th><th>This page</th><th>MT5 report</th><th>Result</th></tr>'+R.map(function(r){var a=r[1],m=r[2];if(m==null)return'<tr><td>'+r[0]+'</td><td>'+fm(a)+'</td><td>–</td><td>not in report</td></tr>';var df=Math.abs(a-m),rel=m?df/Math.abs(m):df,st=df<.011?'✓ exact':rel<.02?'≈ close ('+(rel*100).toFixed(1)+'% off)':'✗ differs ('+(rel*100).toFixed(1)+'% off)';var F=r[3]?function(x){return''+Math.round(x)}:fm;return'<tr><td>'+r[0]+'</td><td>'+F(a)+'</td><td>'+F(m)+'</td><td class="'+(df<.011?'pos':rel<.02?'':'neg')+'">'+st+'</td></tr>'}).join('')+'</table></div><div class="s" style="margin-top:6px">Profit totals use closed positions and match exactly. Trade counts can differ because MT5 counts every closing deal (partial closes, close-by); drawdown can differ slightly because MT5 orders balance changes deal by deal.</div>'}
+function exportAll(){var f1=$('d1').value,f2=$('d2').value,H=['Account','Name','Trades','Win rate','Trading P&L','Profit factor','Broker result (B-book)','Avg win','Avg loss','Max win','Max loss','Max drawdown','Max drawdown %','Commission (info)','Swap (info)','Avg hold (sec)','Median hold (sec)','Toxic trades','Toxic % of trades','Toxic share of profit','Scalp trades','Scalp %','Scalp net P&L','Risk score','Martingale/grid score','Flag','Equity-formula Net P&L'],W=r2;
+ var rows=CL.map(function(c){var s=c.s,D=dd(c.F,base(c));return[s.id,s.name||'',s.n,pc1(s.wr),W(s.net),s.pf===Infinity?'n/a':W(s.pf),W(-s.net),W(s.aw),W(s.al),W(s.mw),W(s.ml),W(D.mdd),pc1(D.mddp),W(s.ccm),W(s.csw),Math.round(s.ad),Math.round(s.mh),s.tn,pc1(s.tp),pc1(s.tsh),s.sn,pc1(s.sp),W(s.snet),Math.round(s.rk),Math.round(s.pm),s.flag,W(s.eqn)]}).sort(function(a,b){return b[23]-a[23]});
+ var cash=[['Account','Name','Deposit','Withdrawal','Credit In','Credit Out','Other / bonus','Events']];CL.forEach(function(c){var ev=(c.ev||[]).filter(function(e){return(!f1||e.day>=f1)&&(!f2||e.day<=f2)}),m=cashSum(ev),o=0;Object.keys(m).forEach(function(k){if(/^Additional/.test(k))o+=m[k]});cash.push([c.id,c.name||'',W(m.Deposit||0),W(-(m.Withdrawal||0)),W(m['Credit In']||0),W(-(m['Credit Out']||0)),W(o),ev.length])});
+ xl([{n:'Info',w:[34,40],rows:[['All clients report'],['Date range (by close date)',(f1||'start')+' to '+(f2||'end')],['Scalp definition','held up to '+THR+' s'],['Toxic definition','winning trade held up to '+(+$('tox_s').value||60)+' s'],['Clients',CL.length],['Sorted by','Risk score (highest first)']]},{n:'Clients',w:[10,20,8,9,12,9,12,10,10,10,10,12,10,10,9,10,10,8,9,10,8,8,12,8,10,26,14],rows:[H].concat(rows)},{n:'Cash Summary',w:[10,20,12,12,12,12,12,8],rows:cash}],'All_Clients_'+(f1||'start')+'_to_'+(f2||'end')+'.xlsx')}
+function exportReport(){var S=scopeT(),c=S.c,f1=$('d1').value,f2=$('d2').value,css=document.querySelector('style').textContent,cl_=function(e){return e.outerHTML.replace(/<button[\s\S]*?<\/button>/g,'')},up=function(id,n){var e=$(id);while(n--)e=e.parentNode;return cl_(e)};
+ var title=c?(c.name||c.id)+' · account '+c.id:'All loaded clients',parts=[cl_($('hero')),cl_($('cards')),cl_($('costs')),cl_($('riskc').parentNode),up('curve',1),up('days',2),up('scalp',2),up('syms',2),cl_($('timec'))];
+ var html='<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Client report – '+title+'</title><style>'+css+'.top{padding:18px 16px}@media print{body{background:#fff}.card{break-inside:avoid;box-shadow:none;animation:none}.ln{stroke-dashoffset:0!important;animation:none!important}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class="top"><div class="in"><h1>Client report – '+title+'</h1><p>Closed trades '+(f1||'start')+' → '+(f2||'end')+' · generated '+new Date().toISOString().slice(0,10)+' · scalp = held ≤ '+THR+'s</p></div></div><div class="w" style="padding-top:14px"><div style="display:grid;gap:14px">'+parts.join('')+'</div><p class="s" style="margin-top:14px">Net P&amp;L = Profit + Commission + Swap per closed position. Risk score and martingale/grid check are heuristics, not verdicts. To get a PDF: open this file and use Print → Save as PDF.</p></div></body></html>';
+ saveFile('Client_Report_'+(c?c.id:'AllClients')+'_'+(f1||'start')+'_to_'+(f2||'end')+'.html',html,'text/html')}
+function box(l,v){return'<div class="card"><h3>'+l+'</h3><b style="font-size:22px">'+sg(v)+'</b></div>'}
+function costsHtml(s,T){var tc=s.ccm+s.csw+s.cfe,sn=T.filter(function(t){return t.sw!==0}).length;
+ return'<h2>Commission &amp; swap <span class="s">– for observation only. Already inside Net P&amp;L; no P&amp;L number was changed.</span></h2><div class="grid" style="margin-top:6px">'+box('Trade profit (before costs)',s.cpr)+box('Commission',s.ccm)+box('Swap',s.csw)+(s.cfe?box('Fee',s.cfe):'')+box('= Net P&amp;L (used everywhere)',s.net)+'</div>'+
+ '<div class="s" style="margin-top:8px">'+(tc!==0?'Total costs '+fm(tc)+' ('+pc1(s.cpr>0?-tc/s.cpr:0)+' of trade profit) · commission per lot '+fm(s.vol?s.ccm/s.vol:0)+' · '+sn+' trades carried swap.':'No commission or swap was charged in this period (all values are 0 in the report).')+'</div>'}
+function cashEv(){var S=scopeT(),f1=$('d1').value,f2=$('d2').value,ev=[];(S.c?[S.c]:CL).forEach(function(c){(c.ev||[]).forEach(function(e){if((!f1||e.day>=f1)&&(!f2||e.day<=f2)){var q={cid:c.id};for(var k in e)q[k]=e[k];ev.push(q)}})});ev.sort(function(a,b){return a.tm<b.tm?-1:a.tm>b.tm?1:0});return{c:S.c,ev:ev}}
+function cashSum(ev){var m={};ev.forEach(function(e){m[e.type]=(m[e.type]||0)+e.v});return m}
+function cashView(){var X=cashEv(),ev=X.ev,c=X.c,m=cashSum(ev),all=!c,T=['Deposit','Withdrawal','Credit In','Credit Out'];Object.keys(m).forEach(function(k){if(T.indexOf(k)<0)T.push(k)});
+ var cf=c&&c.S['Credit Facility:'],warn=c&&cf!=null&&Math.abs(N(cf)-(c.I.cin-c.I.cout))>.01;
+ $('cashc').innerHTML='<div class="row" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><h2 style="margin:0">💰 Deposit / withdrawal / credit history <span class="s">(date range above)</span></h2><span><button class="dlb" id="xc">⬇ Download (Excel)</button>'+(c?' <button id="fc">Use these in calculator</button>':'')+'</span></div>'+
+ '<div class="grid" style="margin:10px 0">'+T.map(function(k){return'<div class="card"><h3>'+k+'</h3><b style="font-size:20px">'+sg(m[k]||0)+'</b></div>'}).join('')+'</div>'+
+ (ev.length?'<div class="sc" style="max-height:320px;overflow:auto"><table><tr><th>Date</th><th>Time</th>'+(all?'<th>Client</th>':'')+'<th>Type</th><th>Amount</th><th>Balance after</th><th>Comment</th></tr>'+ev.map(function(e){return'<tr><td>'+e.day+'</td><td>'+e.tm.slice(11)+'</td>'+(all?'<td>'+e.cid+'</td>':'')+'<td>'+e.type+'</td><td>'+sg(e.v)+'</td><td>'+(e.bal==null?'':fm(N(e.bal)))+'</td><td style="text-align:left">'+e.cm+'</td></tr>'}).join('')+'</table></div>':'<div class="m">No deposit, withdrawal or credit rows in this date range.</div>')+
+ (warn?'<div class="wn">The report summary shows Credit Facility '+fm(N(cf))+' but the Deals list contains only '+fm(c.I.cin-c.I.cout)+' of net credit – operations missing from the MT5 export will not appear here.</div>':'');
+ $('xc').onclick=exportCash;var fc=$('fc');if(fc)fc.onclick=function(){var I=c.I;I.dep=m.Deposit||0;I.wd=-(m.Withdrawal||0);I.cin=m['Credit In']||0;I.cout=-(m['Credit Out']||0);I.add=0;Object.keys(m).forEach(function(k){if(/^Additional/.test(k))I.add+=m[k]});run()}}
+function xl(sheets,name){var wb=XLSX.utils.book_new();sheets.forEach(function(s){var ws=XLSX.utils.aoa_to_sheet(s.rows);ws['!cols']=(s.w||[]).map(function(x){return{wch:x}});XLSX.utils.book_append_sheet(wb,ws,s.n)});
+ saveFile(name,XLSX.write(wb,{bookType:'xlsx',type:'array'}),'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')}
+function fn(c,f1,f2,w){return w+'_'+(c?c.id:'AllClients')+'_'+(f1||'start')+'_to_'+(f2||'end')+'.xlsx'}
+function exportCash(){var X=cashEv(),c=X.c,f1=$('d1').value,f2=$('d2').value,m=cashSum(X.ev);
+ xl([{n:'Cash History',w:[12,10,10,22,14,14,40],rows:[['Date','Time','Client','Type','Amount','Balance after','Comment']].concat(X.ev.map(function(e){return[e.day,e.tm.slice(11),e.cid,e.type,r2(e.v),e.bal==null?'':r2(N(e.bal)),e.cm]}))},
+  {n:'Summary',w:[30,16],rows:[['Cash history summary'],['Client',c?c.id+(c.name?' – '+c.name:''):'All loaded clients'],['Date range (by date)',(f1||'start')+' to '+(f2||'end')],[],['Type','Total']].concat(Object.keys(m).map(function(k){return[k,r2(m[k])]}))}],fn(c,f1,f2,'Cash_History'))}
+function exportScalp(){var S=scopeT(),c=S.c,T=S.T,f1=$('d1').value,f2=$('d2').value,TXS=+$('tox_s').value||60,sc=T.filter(function(t){return t.sc}).sort(function(a,b){return(a.ct||0)-(b.ct||0)});
+ if(!sc.length){alert('No scalping trades (held ≤ '+THR+'s) in this date range.');return}
+ var s=stat(sc),a=stat(T),W=function(v){return r2(v)};
+ var tr=sc.map(function(t){return[t.day,fdt(t.ot),fdt(t.ct),t.cid,t.id,t.sy,t.ty,t.v,t.dur,fd(t.dur),t.op==null?'':N(t.op),t.cp==null?'':N(t.cp),W(t.pr),W(t.cm),W(t.sw),W(t.net),t.net>0?'Win':t.net<0?'Loss':'Breakeven',t.tx?'Yes':'']});
+ tr.push(['TOTAL','','','','','','',W(s.vol),'','','','',W(s.cpr),W(s.ccm),W(s.csw),W(s.net),'','']);
+ var sm=[['Scalping Report'],['Client',c?c.id+(c.name?' – '+c.name:''):'All loaded clients'],['Date range (by close date)',(f1||'start')+' to '+(f2||'end')],['Scalp definition','Trade held up to '+THR+' seconds'],['Toxic definition','Winning trade held up to '+TXS+' seconds'],[],['Metric','Value'],
+  ['Total trades in range',a.n],['Scalp trades',s.n],['Scalp % of trades',pc1(a.n?s.n/a.n:0)],['Scalp wins',s.w],['Scalp losses',s.l],['Scalp win rate',pc1(s.wr)],['Gross profit',W(s.gp)],['Gross loss',W(s.gl)],['Net P&L (scalp)',W(s.net)],['Profit factor',s.pf===Infinity?'n/a (no losses)':W(s.pf)],['Average win',W(s.aw)],['Average loss',W(s.al)],['Largest win',W(s.mw)],['Largest loss',W(s.ml)],['Average hold (sec)',Math.round(s.ad)],['Total lots',W(s.vol)],['Commission (info)',W(s.ccm)],['Swap (info)',W(s.csw)],['Toxic trades',s.tn],['Toxic trades P&L',W(s.tnet)]];
+ function by(key,label,first){var g=grp(sc,key);return[[label,'Scalp trades','Wins','Losses','Win rate','Net P&L','Lots']].concat(Object.keys(g).sort().map(function(k){var q=stat(g[k]);return[k,q.n,q.w,q.l,pc1(q.wr),W(q.net),W(q.vol)]}))}
+ var sh=[{n:'Summary',w:[30,34],rows:sm},{n:'Scalp Trades',w:[12,20,20,10,10,10,7,7,10,12,11,11,10,11,9,11,11,7],rows:[['Close Date','Open Time','Close Time','Client','Position','Symbol','Type','Lots','Hold (sec)','Hold','Open Price','Close Price','Profit','Commission','Swap','Net P&L','Result','Toxic']].concat(tr)},
+  {n:'By Day',w:[14,14,8,8,10,12,10],rows:by('day','Date')},{n:'By Symbol',w:[14,14,8,8,10,12,10],rows:by('sy','Symbol')}];
+ if(!c)sh.push({n:'By Client',w:[14,14,8,8,10,12,10],rows:by('cid','Client')});
+ xl(sh,fn(c,f1,f2,'Scalping_Report'))}
+function hm(ms){return ms==null?'':new Date(ms).toISOString().slice(11,19)}
+function tlist(T,all){var R=T.slice().sort(function(a,b){return(b.ct||0)-(a.ct||0)}),m=1000;
+ $('tl').innerHTML='<table><tr><th>Close date</th><th>Open</th><th>Close</th>'+(all?'<th>Client</th>':'')+'<th>Symbol</th><th>Type</th><th>Lots</th><th>Hold</th><th>Net P&amp;L</th><th>Tag</th></tr>'+R.slice(0,m).map(function(t){return'<tr><td>'+t.day+'</td><td>'+hm(t.ot)+'</td><td>'+hm(t.ct)+'</td>'+(all?'<td>'+t.cid+'</td>':'')+'<td>'+t.sy+'</td><td>'+t.ty+'</td><td>'+t.v+'</td><td>'+(t.dur==null?'':fd(t.dur))+'</td><td>'+sg(t.net)+'</td><td>'+(t.tx?'☠ toxic ':'')+(t.sc?'⚡ fast':'')+'</td></tr>'}).join('')+'</table>'+(R.length>m?'<div class="s">Showing newest '+m+' of '+R.length+' trades.</div>':'')}
+function dayRange(){var d=[].concat.apply([],CL.map(function(c){return c.T.map(function(t){return t.day})})).filter(function(x){return/^\d{4}-/.test(x)}).sort();return d.length?[d[0],d[d.length-1]]:['','']}
+function addDays(s,n){var d=new Date(s+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10)}
+function setDates(p){var r=dayRange(),a=r[0],b=r[1];$('d1').min=$('d2').min=a;$('d1').max=$('d2').max=b;
+ if(p==='all'){$('d1').value=a;$('d2').value=b}else if(p==='m'){$('d1').value=b.slice(0,8)+'01';$('d2').value=b}else{$('d1').value=addDays(b,-(+p-1));$('d2').value=b}
+ document.querySelectorAll('#pre button').forEach(function(x){x.classList.toggle('on',x.dataset.p===p)})}
+document.querySelectorAll('#pre button').forEach(function(x){x.onclick=function(){setDates(x.dataset.p);run()}});
+['d1','d2'].forEach(function(i){$(i).oninput=function(){document.querySelectorAll('#pre button').forEach(function(x){x.classList.remove('on')});if(CL.length)run()}});
+['thr','tox_s','mn','sp'].forEach(function(i){$(i).oninput=function(){if(CL.length)run()}});
+$('ex').onclick=function(){var l=['Account,Name,Trades,WinRate,TradingPnL,ProfitFactor,EquityNetPnL,BrokerResult,AvgWin,AvgLoss,MaxWin,MaxLoss,MaxDrawdown,MaxDrawdownPct,Commission,Swap,AvgHoldSec,MedianHoldSec,ToxicTrades,ToxicPct,ToxicShareOfProfit,Payoff,Lots,ScalpTrades,ScalpPct,ScalpNet,Flag'];
+ CL.forEach(function(c){var s=c.s;l.push([s.id,'"'+(s.name||'')+'"',s.n,s.wr.toFixed(4),s.net.toFixed(2),s.pf===Infinity?'inf':s.pf.toFixed(2),s.eqn.toFixed(2),(-s.net).toFixed(2),s.aw.toFixed(2),s.al.toFixed(2),s.mw.toFixed(2),s.ml.toFixed(2),s.mdd.toFixed(2),s.mddp.toFixed(4),s.ccm.toFixed(2),s.csw.toFixed(2),Math.round(s.ad),Math.round(s.mh),s.tn,s.tp.toFixed(4),s.tsh.toFixed(4),s.po.toFixed(2),s.vol.toFixed(2),s.sn,s.sp.toFixed(4),s.snet.toFixed(2),s.flag].join(','))});
+ saveFile('client-analysis.csv',l.join('\n'),'text/csv')};
+var dz=$('dz'),fi=$('f');dz.onclick=function(){fi.click()};fi.onchange=function(){if(fi.files.length)load(fi.files)};
+dz.ondragover=function(e){e.preventDefault();dz.classList.add('h')};dz.ondragleave=function(){dz.classList.remove('h')};
+dz.ondrop=function(e){e.preventDefault();dz.classList.remove('h');if(e.dataTransfer.files.length)load(e.dataTransfer.files)};
+</script></body></html>
