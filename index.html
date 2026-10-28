@@ -2,51 +2,56 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MT5 Client P&amp;L Analyzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f4f6fb;--card:#fff;--tx:#16202e;--mut:#6b7686;--bd:#e5e9f0;--ac:#4f46e5;--g:#12a150;--r:#e5484d;--gs:#e6f6ec;--rs:#fdeceb;--hl:#eef0ff;--sh:0 2px 10px rgba(20,30,60,.06);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1117;--card:#171b24;--tx:#e8ecf3;--mut:#93a0b4;--bd:#262c38;--ac:#8b86ff;--g:#34d27b;--r:#ff6b70;--gs:#12301f;--rs:#3a1a1c;--hl:#1e2240;--sh:none;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0e1117;--card:#171b24;--tx:#e8ecf3;--mut:#93a0b4;--bd:#262c38;--ac:#8b86ff;--g:#34d27b;--r:#ff6b70;--gs:#12301f;--rs:#3a1a1c;--hl:#1e2240;--sh:none;color-scheme:dark}
+:root{--bg:#e9eeed;--card:#fbfcfb;--tx:#0e1b1f;--mut:#5d6e72;--bd:#d3dcdb;--ac:#0a6e6a;--g:#0e9158;--r:#d23b3b;--gs:#dff3e8;--rs:#fbe3e1;--hl:#e3ecea;--sh:0 1px 0 rgba(14,27,31,.04);--mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1214;--card:#111b1e;--tx:#e5eeee;--mut:#86999c;--bd:#1f2e32;--ac:#4fd6c6;--g:#3ddc8a;--r:#ff6b6b;--gs:#0f2e20;--rs:#371718;--hl:#162428;--sh:none;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a1214;--card:#111b1e;--tx:#e5eeee;--mut:#86999c;--bd:#1f2e32;--ac:#4fd6c6;--g:#3ddc8a;--r:#ff6b6b;--gs:#0f2e20;--rs:#371718;--hl:#162428;--sh:none;color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-.w{max-width:1100px;margin:0 auto;padding:0 16px 40px}
-.top{background:linear-gradient(135deg,#4f46e5,#7c3aed 55%,#06b6d4);color:#fff;padding:26px 16px 70px}
-.top .in{max-width:1100px;margin:0 auto}.top h1{margin:0;font-size:24px}.top p{margin:4px 0 0;opacity:.9}
-.live{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);border-radius:99px;padding:2px 10px;font-size:12px;margin-bottom:8px}
-.live i{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:pl 1.4s infinite}
-@keyframes pl{0%{box-shadow:0 0 0 0 rgba(74,222,128,.7)}100%{box-shadow:0 0 0 9px rgba(74,222,128,0)}}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;box-shadow:var(--sh);animation:up .5s both}
-@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.drop{margin-top:14px;text-align:center;cursor:pointer;padding:26px;border:2px dashed var(--bd)}.drop.h{border-color:var(--ac);background:var(--hl)}
-.drop b{font-size:16px}.big{font-size:34px}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.55 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums}
+.w{max-width:1180px;margin:0 auto;padding:0 18px 48px}
+.top{background:#0d1f22;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:28px 28px;color:#eaf4f3;padding:30px 18px 78px;border-bottom:3px solid #4fd6c6}
+.top .in{max-width:1180px;margin:0 auto}.top h1{margin:0;font-size:28px;font-weight:700;letter-spacing:-.4px}.top p{margin:6px 0 0;color:#9db6b4;max-width:60ch}
+.live{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(79,214,198,.45);color:#4fd6c6;border-radius:6px;padding:2px 10px;font-size:12px;font-weight:600;margin-bottom:12px}
+.live i{width:7px;height:7px;border-radius:50%;background:#4fd6c6;animation:pl 1.8s infinite}
+@keyframes pl{0%{box-shadow:0 0 0 0 rgba(79,214,198,.7)}100%{box-shadow:0 0 0 8px rgba(79,214,198,0)}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px;box-shadow:var(--sh)}
+.drop{margin-top:14px;text-align:center;cursor:pointer;padding:30px;border:2px dashed var(--ac);background:var(--card);transition:background .15s}.drop.h,.drop:hover{background:var(--hl)}
+.drop b{font-size:17px}.big{font-size:34px}
 .m{color:var(--mut)}.s{font-size:12px;color:var(--mut)}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
-.tab{border:1px solid var(--bd);background:var(--card);border-radius:99px;padding:6px 14px;cursor:pointer;font:inherit;color:var(--tx)}.tab.on{background:var(--ac);color:#fff;border-color:var(--ac)}
-.hero{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
-.hero .n{font-size:42px;font-weight:800;letter-spacing:-1px;line-height:1.1}
-.pill{display:inline-block;border-radius:99px;padding:3px 12px;font-weight:600;font-size:13px}.pill.g{background:var(--gs);color:var(--g)}.pill.r{background:var(--rs);color:var(--r)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:14px}
-.grid .card h3,h2{margin:0 0 6px;font-size:13px;color:var(--mut);font-weight:600}
-.kv{display:flex;align-items:center;gap:12px}.kv b{font-size:26px}
-.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-top:14px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 14px}
+.tab{border:1px solid var(--bd);background:var(--card);border-radius:8px;padding:7px 14px;cursor:pointer;font:inherit;font-weight:500;color:var(--tx);transition:background .15s,border-color .15s}.tab:hover{border-color:var(--ac)}.tab.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tab.on,:root:not([data-theme="light"]) .dlb,:root:not([data-theme="light"]) .fbar button.on{color:#06201d!important}}
+.hero{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;padding:22px 24px}
+.hero .n{font:600 46px/1.1 var(--mono);letter-spacing:-1.5px}
+.pill{display:inline-block;border-radius:6px;padding:3px 12px;font-weight:600;font-size:13px}.pill.g{background:var(--gs);color:var(--g)}.pill.r{background:var(--rs);color:var(--r)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:12px;margin-top:14px}
+.grid .card{padding:14px 16px;border-top:3px solid var(--bd)}.grid .card h3,h2{margin:0 0 6px;font-size:13px;color:var(--mut);font-weight:600}
+h2{font-size:15px;color:var(--tx);font-weight:700;letter-spacing:-.1px;margin-bottom:10px}
+.kv{display:flex;align-items:center;gap:12px}.kv b,.grid .card>b{font-family:var(--mono);font-weight:600}.kv b{font-size:26px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr));gap:14px;margin-top:14px}
 .pos{color:var(--g)}.neg{color:var(--r)}
-.hb{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:13px}.hb .l{width:92px;flex:none;overflow:hidden;text-overflow:ellipsis}
-.hb .t{flex:1;background:var(--hl);border-radius:6px;height:12px;overflow:hidden}.hb .t i{display:block;height:100%;border-radius:6px;transform-origin:left;animation:gr .8s ease both}
-@keyframes gr{from{transform:scaleX(0)}}.hb .v{width:96px;text-align:right;flex:none}
+.hb{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:13px}.hb .l{width:92px;flex:none;overflow:hidden;text-overflow:ellipsis}
+.hb .t{flex:1;background:var(--hl);border-radius:4px;height:12px;overflow:hidden}.hb .t i{display:block;height:100%;border-radius:4px;transform-origin:left;animation:gr .8s ease both}
+@keyframes gr{from{transform:scaleX(0)}}.hb .v{width:96px;text-align:right;flex:none;font-family:var(--mono);font-size:12.5px}
 .ln{stroke-dasharray:2000;stroke-dashoffset:2000;animation:dr 1.4s ease forwards}@keyframes dr{to{stroke-dashoffset:0}}
-.ins{list-style:none;padding:0;margin:0}.ins li{padding:8px 0;border-bottom:1px solid var(--bd)}.ins li:last-child{border:0}
+.ins{list-style:none;padding:0;margin:0}.ins li{padding:9px 0;border-bottom:1px solid var(--bd)}.ins li:last-child{border:0}
 button,select,input{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:6px 10px}
-button{cursor:pointer}details{margin-top:14px}summary{cursor:pointer;font-weight:600;padding:10px 14px;background:var(--card);border:1px solid var(--bd);border-radius:12px}
-details[open] summary{border-radius:12px 12px 0 0}details>div{border:1px solid var(--bd);border-top:0;border-radius:0 0 12px 12px;padding:14px;background:var(--card)}
-.f{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}.f label{display:flex;flex-direction:column;font-size:12px;color:var(--mut)}
-.wn{background:#fff4d6;color:#5c4400;border-radius:10px;padding:8px 12px;margin:8px 0;font-size:13px}
-@media (prefers-color-scheme:dark){.wn{background:#3a3318;color:#f3e3a6}}
-.sc{overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{padding:7px 10px;border-bottom:1px solid var(--bd);text-align:right;white-space:nowrap}
-th{color:var(--mut);font-size:12px;cursor:pointer}th:first-child,td:first-child,td.l,th.l{text-align:left}tr[data-id]{cursor:pointer}tr[data-id]:hover{background:var(--hl)}
-.fl{padding:2px 8px;border-radius:99px;background:var(--hl);font-size:12px}
+input:focus-visible,button:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+button{cursor:pointer;font-weight:500}button:hover{border-color:var(--ac)}
+details{margin-top:14px}summary{cursor:pointer;font-weight:600;padding:12px 16px;background:var(--card);border:1px solid var(--bd);border-radius:10px}
+details[open] summary{border-radius:10px 10px 0 0}details>div{border:1px solid var(--bd);border-top:0;border-radius:0 0 10px 10px;padding:16px;background:var(--card)}
+.f{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.f label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--mut)}
+.wn{background:#fff3d1;color:#5c4400;border-radius:8px;padding:9px 13px;margin:8px 0;font-size:13px;border-left:3px solid #d99a00}
+@media (prefers-color-scheme:dark){.wn{background:#33300f;color:#f3e3a6}}
+.sc{overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{padding:8px 11px;border-bottom:1px solid var(--bd);text-align:right;white-space:nowrap}
+tr:nth-child(even) td{background:color-mix(in srgb,var(--hl) 45%,transparent)}
+th{color:var(--mut);font-size:12px;font-weight:600;cursor:pointer;position:sticky;top:0;background:var(--card)}th:first-child,td:first-child,td.l,th.l{text-align:left}tr[data-id]{cursor:pointer}tr[data-id]:hover td,tr[data-sy]:hover td{background:var(--hl)}tr[data-sy]{cursor:pointer}
+.fl{padding:2px 9px;border-radius:6px;background:var(--hl);font-size:12px;font-weight:500}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.ln{stroke-dashoffset:0}}
-.fbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;position:sticky;top:8px;z-index:5}.fbar label{display:flex;align-items:center;gap:6px}.fbar button{padding:4px 10px;border-radius:99px}.fbar button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.fbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;position:sticky;top:8px;z-index:5;border-color:var(--ac)}.fbar label{display:flex;align-items:center;gap:6px}.fbar button{padding:4px 11px;border-radius:6px}.fbar button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
 .dlb{background:var(--ac)!important;color:#fff!important;border-color:var(--ac)!important;font-weight:600}
-.topf{margin-top:-48px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}.topf button{padding:4px 10px;border-radius:99px}.rm{padding:2px 8px;color:var(--r)}pre.mg{margin:8px 0;padding:12px;background:var(--hl);border-radius:10px;white-space:pre-wrap;font:12.5px/1.55 ui-monospace,Menlo,Consolas,monospace;max-height:340px;overflow:auto}
+.topf{margin-top:-52px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;border-color:var(--ac)}.topf button{padding:4px 11px;border-radius:6px}.rm{padding:2px 8px;color:var(--r)}pre.mg{margin:8px 0;padding:14px;background:var(--hl);border-radius:8px;white-space:pre-wrap;font:12.5px/1.6 var(--mono);max-height:340px;overflow:auto}
 </style></head>
 <body>
 <div class="top"><div class="in"><span class="live"><i></i> Live – updates instantly</span><h1>MT5 Client P&amp;L Analyzer</h1><p>Drop your MT5 history file and see how the client is doing in plain English.</p></div></div>
@@ -56,7 +61,8 @@ th{color:var(--mut);font-size:12px;cursor:pointer}th:first-child,td:first-child,
 <div id="app" hidden>
 <div class="tabs" id="tabs"></div>
 <div class="card fbar" id="fbar"><b>📅 Date range</b><label>From <input type="date" id="d1"></label><label>To <input type="date" id="d2"></label><span id="pre"><button data-p="all">All time</button> <button data-p="1">Last day</button> <button data-p="7">Last 7 days</button> <button data-p="30">Last 30 days</button> <button data-p="m">This month</button></span><span class="s" id="fcnt"></span></div>
-<div class="card hero" id="hero"></div>
+<div class="card" id="symbar" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"></div>
+<div class="card hero" id="hero" style="margin-top:14px"></div>
 <div class="card" id="mgc" style="margin-top:14px"></div>
 <div class="grid" id="cards"></div>
 <div class="card" id="costs" style="margin-top:14px"></div>
@@ -64,9 +70,10 @@ th{color:var(--mut);font-size:12px;cursor:pointer}th:first-child,td:first-child,
 <div class="card" style="margin-top:14px"><h2>Equity curve &amp; drawdown from peak</h2><div id="curve"></div></div>
 <div class="two"><div class="card"><h2>Profit / loss per day</h2><div id="days"></div></div><div class="card"><h2>What this means</h2><ul class="ins" id="ins"></ul></div></div>
 <div class="two"><div class="card"><h2>Fast trades vs normal trades</h2><div id="scalp"></div></div><div class="card"><h2>☠ Toxic trades</h2><div id="tox"></div></div></div>
-<div class="two"><div class="card"><h2>Result by symbol</h2><div id="syms"></div></div><div class="card"><h2>Result by how long trades were held</h2><div id="hold"></div></div></div>
+<div class="two"><div class="card"><h2>Where the client trades (share of lots)</h2><div id="syms"></div></div><div class="card"><h2>Result by how long trades were held</h2><div id="hold"></div></div></div>
+<div class="card" id="symc" style="margin-top:14px"></div>
 <div class="card" id="timec" style="margin-top:14px"></div>
-<div class="card" id="cmpp" style="margin-top:14px"><h2>🔁 Compare two periods <span class="s">(uses the selected client, independent of the main date range)</span></h2><div class="f"><label>Period A from<input type="date" id="a1"></label><label>Period A to<input type="date" id="a2"></label><label>Period B from<input type="date" id="b1"></label><label>Period B to<input type="date" id="b2"></label></div><div id="cmpr" class="sc" style="margin-top:10px"></div></div>
+<div class="card" id="cmpp" style="margin-top:14px"><h2>🔁 Compare two periods <span class="s">(uses the selected client and script filter, independent of the main date range)</span></h2><div class="f"><label>Period A from<input type="date" id="a1"></label><label>Period A to<input type="date" id="a2"></label><label>Period B from<input type="date" id="b1"></label><label>Period B to<input type="date" id="b2"></label></div><div id="cmpr" class="sc" style="margin-top:10px"></div></div>
 <div class="card" id="cashc" style="margin-top:14px"></div>
 <div class="card" id="mt5c" style="margin-top:14px"></div>
 <div class="card" id="cmpc" style="margin-top:14px"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px"><h2 style="margin:0">All clients – click one to open it</h2><button class="dlb" id="xa">⬇ Download all clients (Excel)</button></div><div class="sc" id="tc"></div></div>
@@ -78,6 +85,12 @@ th{color:var(--mut);font-size:12px;cursor:pointer}th:first-child,td:first-child,
 <label>Reversal = opposite trade within (sec)<input type="number" id="rw" value="60"></label>
 <label>Min trades before flagging<input type="number" id="mn" value="10"></label>
 <label>Scalper if fast trades ≥ (%)<input type="number" id="sp" value="50"></label>
+<label>Risk: toxic profit share that = max points (%)<input type="number" id="rtx" value="50"></label>
+<label>Risk: scalp share that = max points (%)<input type="number" id="rsc" value="70"></label>
+<label>Risk: trades needed for full confidence<input type="number" id="rcf" value="100"></label>
+<label>Risk level HIGH from score<input type="number" id="rhi" value="70"></label>
+<label>Risk level MEDIUM from score<input type="number" id="rmd" value="40"></label>
+<label>Flag “Toxic” if toxic profit share ≥ (%)<input type="number" id="rfl" value="30"></label>
 <label>&nbsp;<button id="ex">Export clients CSV</button></label></div></div></details>
 </div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -147,11 +160,29 @@ function pattern(T){
  if(wr>=.65&&al&&aw/al<.5)R.notes.push('High win rate ('+Math.round(wr*100)+'%) with a low payoff ratio ('+(aw/al).toFixed(2)+') – typical of grid / averaging strategies.');
  if(!R.notes.length)R.notes.push('No strong sign of lot escalation or position stacking.');
  return R}
-function risk(s,pt,mh){var P=[],sc=0;
- function add(l,v,m){v=Math.max(0,Math.min(m,v));P.push([l,v,m]);sc+=v}
- add('Toxic profit share',s.tsh/.5*25,25);add('Scalping share',s.sp/.7*15,15);add('Profit factor above 1',s.pf===Infinity?20:(s.pf-1)*20,20);
- add('Martingale / grid pattern',pt.score/100*20,20);add('Very short typical hold',(900-mh)/900*10,10);add('Very high win rate',(s.wr-.5)/.4*10,10);
- return{score:sc,parts:P}}
+function RT(){return{tx:(+$('rtx').value||50)/100,sc:(+$('rsc').value||70)/100,cf:+$('rcf').value||100,hi:+$('rhi').value||70,md:+$('rmd').value||40,fl:(+$('rfl').value||30)/100}}
+function hedge(T){var A=T.filter(function(t){return t.ot!=null&&t.ct!=null}).sort(function(a,b){return a.ot-b.ot}),act=[],h=0;
+ A.forEach(function(t){act=act.filter(function(o){return o.ct>t.ot});if(act.some(function(o){return o.sy===t.sy&&o.ty!==t.ty}))h++;act.push(t)});return{n:h,p:A.length?h/A.length:0}}
+function risk(s,pt,mh,T){var R=RT(),n=s.n,conf=n?Math.min(1,n/R.cf):0,B=[],P=[],bs=0,ps=0,spt=(+$('sp').value||50)/100,mn=+$('mn').value||0,
+ brs=n?T.filter(function(t){return t.bu||t.rv}).length/n:0,hg=hedge(T),wl=(s.dw&&s.dl)?Math.max(0,1-s.dw/s.dl):0;
+ function add(L,l,v,m,txt){v=Math.max(0,Math.min(m,v));L.push([l,v,m,txt]);return v}
+ bs+=add(B,'Scalping share',s.sp/R.sc*25,25,pc(s.sp)+' of trades are held ≤ '+THR+'s');
+ bs+=add(B,'Burst / reversal trades',brs/.2*20,20,pc(brs)+' of trades are burst or reversal trades');
+ bs+=add(B,'Martingale / grid pattern',pt.score/100*25,25,'martingale / grid score '+Math.round(pt.score)+'/100');
+ bs+=add(B,'Very short typical hold',(900-mh)/900*10,10,'median hold is only '+fd(mh));
+ bs+=add(B,'Winners held shorter than losers',wl/.7*10,10,'winners held '+fd(s.dw)+' vs losers '+fd(s.dl));
+ bs+=add(B,'Hedging / locking',hg.p/.2*10,10,pc(hg.p)+' of trades opened against an open opposite position on the same script');
+ ps+=add(P,'Toxic profit share',s.tsh/R.tx*40,40,pc(s.tsh)+' of the profit comes from toxic trades');
+ ps+=add(P,'Profit factor above 1',s.pf===Infinity?40:(s.pf-1)*40,40,'profit factor is '+pf(s.pf));
+ ps+=add(P,'Very high win rate',(s.wr-.5)/.4*20,20,'win rate is '+pc(s.wr));
+ var score=Math.max(bs,ps)*conf,level=score>=R.hi?'HIGH':score>=R.md?'MEDIUM':'LOW',tg=[];
+ if(s.sp>=spt)tg.push('Scalper');if(brs>=.03)tg.push('Burst / reversal');if(pt.score>=60)tg.push('Martingale / grid');else if(pt.score>=35)tg.push('Possible grid');
+ if(wl>=.5&&s.pf>1.3&&n>=mn)tg.push('Arbitrage-suspect');if(hg.p>=.1)tg.push('Hedger');if(!tg.length)tg.push('Normal');
+ var why=B.concat(P).filter(function(q){return q[2]&&q[1]/q[2]>=.4}).sort(function(x,y){return y[1]/y[2]-x[1]/x[2]}).slice(0,4).map(function(q){return q[3]});
+ if(!why.length)why=['No strong risk signals found.'];
+ var has=function(x){return tg.indexOf(x)>=0},act=level==='HIGH'?((has('Scalper')||has('Burst / reversal')||has('Arbitrage-suspect')||has('Hedger'))?'Review this account now: consider A-book, execution rules or lot limits for the fast / burst trading.':has('Martingale / grid')?'Review now: limit maximum lots and watch margin – a martingale / grid account can lose everything at once.':'Review this account now.'):level==='MEDIUM'?'Monitor: re-check weekly and see if the score rises.':'No action needed – normal B-book handling.';
+ if(n&&conf<1)act='Only '+n+' trades – treat as an early indication. '+act;
+ return{score:score,raw:Math.max(bs,ps),b:bs,p:ps,conf:conf,B:B,P:P,level:level,tags:tg,reasons:why,action:act,hg:hg,brs:brs}}
 function wkS(day){var d=new Date(day+'T00:00:00Z');d.setUTCDate(d.getUTCDate()-(d.getUTCDay()+6)%7);return d.toISOString().slice(0,10)}
 function dd(T,base){
  var A=T.map(function(t,i){return[t.ct==null?1e18:t.ct,i,t]}).sort(function(a,b){return a[0]-b[0]||a[1]-b[1]}).map(function(a){return a[2]});
@@ -161,7 +192,9 @@ function dd(T,base){
  return{E:E,P:P,A:A,mdd:mdd,mddp:mddp,cur:pk-e,curp:pk?(pk-e)/pk:0,bw:bw,bwv:bwv,bl:bl,blv:blv}}
 </script>
 <script>
-var $=function(i){return document.getElementById(i)},CL=[],SEL='*',SORT={k:'rk',d:-1},THR=300;
+var $=function(i){return document.getElementById(i)},CL=[],SEL='*',SORT={k:'rk',d:-1},THR=300,SYMF={},SYSORT={k:'net',d:-1};
+function symOk(y){return !Object.keys(SYMF).length||!!SYMF[y]}
+function symTxt(){var k=Object.keys(SYMF).sort();return k.length?' · scripts: '+k.join(', '):''}
 function fm(v){return v.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}
 function cl(v){return v>0?'pos':v<0?'neg':''}
 function sg(v){return'<span class="'+cl(v)+'">'+(v>0?'+':'')+fm(v)+'</span>'}
@@ -197,17 +230,17 @@ function load(files){var done=0,bad=[],list=Array.prototype.slice.call(files);
    if(++done===list.length){$('msg').textContent='✓ '+CL.length+' client(s) loaded'+(bad.length?' – not an MT5 report: '+bad.join(', '):'');if(CL.length){$('app').hidden=false;setDates('all');setCmp();if(CL.length===1)SEL=CL[0].id;else if(!CL.some(function(c){return c.id===SEL}))SEL='*';run()}}};
   rd.readAsArrayBuffer(file)})}
 function run(){THR=+$('thr').value||300;var bn=+$('bn').value||5,bw=+$('bw').value||60,rw=+$('rw').value||60,mn=+$('mn').value||0,spt=(+$('sp').value||50)/100,f1=$('d1').value,f2=$('d2').value,tot=0,inr=0;
- CL.forEach(function(c){c.F=c.T.filter(function(t){return(!f1||t.day>=f1)&&(!f2||t.day<=f2)});tot+=c.T.length;inr+=c.F.length;flagBR(c.T,bn,bw,rw);c.T.forEach(function(t){t.cid=c.id;t.sc=t.dur!=null&&t.dur<=THR;t.tx=t.sc||t.bu||t.rv});var s=stat(c.F),D=dd(c.F,base(c));c.s=s;s.id=c.id;s.name=c.name;s.eqn=eqn(c.I);s.mdd=-D.mdd;s.mddp=D.mddp;s.mh=med(c.F);c.pt=pattern(c.F);s.pm=c.pt.score;s.rk=risk(s,c.pt,s.mh).score;
-  s.flag=s.n<mn?'Too few trades':(s.net>0&&s.tsh>=.3)?'☠ Toxic – review':(s.sp>=spt&&s.net>0)?'⚠ Profitable scalper':(s.net>0&&s.pf>=1.5&&s.wr>=.6)?'👀 Profitable – watch':s.sp>=spt?'Scalper':'OK'});
+ symBar();CL.forEach(function(c){c.D=c.T.filter(function(t){return(!f1||t.day>=f1)&&(!f2||t.day<=f2)});c.F=c.D.filter(function(t){return symOk(t.sy)});tot+=c.T.length;inr+=c.F.length;flagBR(c.T,bn,bw,rw);c.T.forEach(function(t){t.cid=c.id;t.sc=t.dur!=null&&t.dur<=THR;t.tx=t.sc||t.bu||t.rv});var s=stat(c.F),D=dd(c.F,base(c));c.s=s;s.id=c.id;s.name=c.name;s.eqn=eqn(c.I);s.mdd=-D.mdd;s.mddp=D.mddp;s.mh=med(c.F);c.pt=pattern(c.F);var rk=risk(s,c.pt,s.mh,c.F);c.rk=rk;s.pm=c.pt.score;s.rk=rk.score;s.rb=rk.b;s.rp=rk.p;s.rc=rk.conf;s.rl=rk.level;s.tags=rk.tags.join(', ');s.act=rk.action;s.why=rk.reasons.join('; ');
+  s.flag=s.n<mn?'Too few trades':rk.level==='HIGH'?'☠ High risk – review':(s.net>0&&s.tsh>=RT().fl)?'☠ Toxic – review':(s.sp>=spt&&s.net>0)?'⚠ Profitable scalper':(s.net>0&&s.pf>=1.5&&s.wr>=.6)?'👀 Profitable – watch':s.sp>=spt?'Scalper':'OK'});
  $('tabs').innerHTML=(CL.length>1?[['*','All clients']]:[]).concat(CL.map(function(c){return[c.id,c.id+(c.name?' · '+c.name:'')]})).map(function(t){return'<button class="tab'+(t[0]===SEL?' on':'')+'" data-id="'+t[0]+'">'+t[1]+'</button>'}).join('')+'<button class="tab" id="addc">➕ Add client file</button><button class="tab" id="clrc">🗑 Clear all</button>';
  document.querySelectorAll('.tab[data-id]').forEach(function(b){b.onclick=function(){SEL=b.dataset.id;run()}});$('addc').onclick=function(){$('f').click()};two($('clrc'),'Click again to clear all',function(){CL=[];SEL='*';$('app').hidden=true;$('msg').textContent='All clients removed. Drop a file to start again.'});
- $('fcnt').textContent=inr+' of '+tot+' trades in range (by close date)';view();renderCalc()}
+ $('fcnt').textContent=inr+' of '+tot+' trades shown (date range by close date'+(Object.keys(SYMF).length?' + script filter':'')+')';view();renderCalc()}
 function view(){
  var c=CL.filter(function(x){return x.id===SEL})[0],T=c?c.F:[].concat.apply([],CL.map(function(x){return x.F})),s=stat(T),up=s.net>=0,b=c?base(c):CL.reduce(function(a,x){return a+base(x)},0),D=dd(T,b),mh=med(T);
  var who=c?(c.name||c.id):CL.length+' clients';
- $('hero').innerHTML='<div><div class="s">'+who+' · closed '+($('d1').value||'start')+' → '+($('d2').value||'end')+'</div><div class="n '+cl(s.net)+'">'+sg(s.net)+'</div><div class="s">Trading result on '+s.n+' closed trades</div></div>'+
+ $('hero').innerHTML='<div><div class="s">'+who+' · closed '+($('d1').value||'start')+' → '+($('d2').value||'end')+symTxt()+'</div><div class="n '+cl(s.net)+'">'+sg(s.net)+'</div><div class="s">Trading result on '+s.n+' closed trades</div></div>'+
  '<div><span class="pill '+(up?'g':'r')+'">Client is '+(up?'UP':'DOWN')+'</span> <span class="pill '+(up?'r':'g')+'">Broker (B-book) is '+(up?'DOWN':'UP')+' '+fm(Math.abs(s.net))+'</span><div class="s" style="margin-top:6px">Client profit = broker loss, and the other way round.</div><div style="margin-top:8px"><button class="dlb" id="rp">⬇ Client report (HTML → print / PDF)</button>'+(c?' <button id="rmc">🗑 Remove this client</button>':'')+'</div></div>';
- $('cards').innerHTML=
+ $('hero').style.borderLeft='6px solid var(--'+(up?'g':'r')+')';$('cards').innerHTML=
  '<div class="card"><h3>Win rate</h3><div class="kv">'+ring(s.wr,'var(--ac)')+'<div><b>'+pc(s.wr)+'</b><div class="s">'+s.w+' won · '+s.l+' lost</div></div></div></div>'+
  '<div class="card"><h3>Profit factor</h3><div class="kv"><b class="'+(s.pf>=1?'pos':'neg')+'">'+pf(s.pf)+'</b><div class="s">Total profit ÷ total loss.<br>Above 1 = profitable.</div></div></div>'+
  '<div class="card"><h3>Average win</h3><b class="pos" style="font-size:26px">'+fm(s.aw)+'</b><div class="s">per winning trade</div></div>'+
@@ -215,13 +248,13 @@ function view(){
  '<div class="card"><h3>Max win / Max loss</h3><div class="kv"><div><b class="pos">'+fm(s.mw)+'</b><div class="s">biggest win</div></div><div><b class="neg">'+fm(s.ml)+'</b><div class="s">biggest loss</div></div></div></div>'+
  '<div class="card"><h3>Max drawdown from peak</h3><b class="neg" style="font-size:26px">-'+fm(D.mdd)+'</b><div class="s">'+(b?pc1(D.mddp)+' of peak · ':'')+'now '+fm(D.cur)+' below peak</div></div>'+
  '<div class="card"><h3>Average hold time</h3><b style="font-size:26px">'+fd(s.ad)+'</b><div class="s">median '+fd(mh)+' · winners '+fd(s.dw)+' · losers '+fd(s.dl)+'</div></div>'+
- '<div class="card"><h3>☠ Toxic trades</h3><div class="kv"><b class="'+(s.tsh>=.3?'neg':'')+'">'+s.tn+'</b><div class="s">'+pc(s.tp)+' of trades · '+sg(s.tnet)+'<br>= '+pc(s.tsh)+' of all profit</div></div></div>'+
+ '<div class="card"><h3>☠ Toxic trades</h3><div class="kv"><b class="'+(s.tsh>=RT().fl?'neg':'')+'">'+s.tn+'</b><div class="s">'+pc(s.tp)+' of trades · '+sg(s.tnet)+'<br>= '+pc(s.tsh)+' of all profit</div></div></div>'+
  '<div class="card"><h3>Fast trades (scalps)</h3><div class="kv">'+ring(s.sp,'#f59e0b')+'<div><b>'+pc(s.sp)+'</b><div class="s">'+s.sn+' trades ≤ '+THR+'s · '+sg(s.snet)+'</div></div></div></div>'+
  '<div class="card"><h3>Streaks</h3><div class="s">Longest win streak: <b class="pos">'+D.bw+'</b> trades ('+sg(D.bwv)+')<br>Longest loss streak: <b class="neg">'+D.bl+'</b> trades ('+sg(D.blv)+')</div></div>'+
  '<div class="card"><h3>Volume traded</h3><b style="font-size:26px">'+fm(s.vol)+'</b><div class="s">lots</div></div>';
  var gd=grp(T,'day'),dy=Object.keys(gd).sort().map(function(k){var q=stat(gd[k]);q.k=k;return q}),gs=grp(T,'sy'),sy=Object.keys(gs).map(function(k){var q=stat(gs[k]);q.k=k;return q}).sort(function(a,b){return b.net-a.net});
  $('curve').innerHTML=s.n?eqChart(D,b):'<span class="m">No trades</span>';$('days').innerHTML=dbars(dy);
- $('syms').innerHTML=hb(sy.map(function(q){return{l:q.k,v:q.net,n:q.n}}),function(r){return sg(r.v)+' <span class="s">('+r.n+')</span>'});
+ $('syms').innerHTML=donut(sy,'vol','Share of lots traded per script (colour = script, number on the right = its net P&L).');
  var bk=[[0,10,'under 10 sec'],[10,30,'10–30 sec'],[30,60,'30–60 sec'],[60,300,'1–5 min'],[300,900,'5–15 min'],[900,3600,'15–60 min'],[3600,1e12,'over 1 hour']],bq=bk.map(function(x){var q=stat(T.filter(function(t){return t.dur!=null&&t.dur>=x[0]&&t.dur<x[1]}));return{l:x[2],v:q.net,n:q.n}});
  $('hold').innerHTML=hb(bq,function(r){return sg(r.v)+' <span class="s">('+r.n+')</span>'});
  var Sc=stat(T.filter(function(t){return t.sc})),Ns=stat(T.filter(function(t){return!t.sc}));
@@ -232,15 +265,15 @@ function view(){
  var L=[];if(s.n){
   L.push(s.pf>=1.5?['✅','Strong: the client makes '+fm(s.pf)+'× more than they lose.']:s.pf>=1?['⚠️','Barely profitable: profit factor '+pf(s.pf)+'. A small edge that can flip quickly.']:['❌','Losing overall: profit factor '+pf(s.pf)+' (below 1).']);
   if(s.wr>=.6&&s.po<.8)L.push(['⚠️','Wins often ('+pc(s.wr)+') but losses are bigger: avg loss '+fm(-s.al)+' vs avg win '+fm(s.aw)+'. A few big losers can wipe out many small wins.']);
-  if(s.tsh>=.3)L.push(['☠','Toxic flow: '+pc(s.tsh)+' of the client’s profit came from scalping, burst or reversal trades.']);
+  if(s.tsh>=RT().fl)L.push(['☠','Toxic flow: '+pc(s.tsh)+' of the client’s profit came from scalping, burst or reversal trades.']);
   L.push(['📉','Max drawdown '+fm(D.mdd)+(b?' ('+pc1(D.mddp)+' of peak)':'')+'; currently '+fm(D.cur)+' below the peak.']);
   L.push([s.sp>=.5?'⚡':'ℹ️',pc(s.sp)+' of trades are fast scalps (≤ '+THR+'s) and they made '+fm(s.snet)+'. Average hold '+fd(s.ad)+' but the typical (median) trade lasts '+fd(mh)+'.']);
   if(sy.length>1)L.push(['📊','Best symbol '+sy[0].k+' ('+sg(sy[0].net)+'), weakest '+sy[sy.length-1].k+' ('+sg(sy[sy.length-1].net)+').']);
   if(dy.length){var bd=dy.slice().sort(function(a,b){return b.net-a.net});L.push(['📅','Best day '+bd[0].k+' ('+sg(bd[0].net)+'), worst day '+bd[bd.length-1].k+' ('+sg(bd[bd.length-1].net)+').'])}}
  $('ins').innerHTML=L.map(function(x){return'<li>'+x[0]+' '+x[1]+'</li>'}).join('');
- $('cmpc').hidden=CL.length<2;tc();tlist(T,!c);$('costs').innerHTML=costsHtml(s,T);cashView();var xs=$('xs');if(xs)xs.onclick=exportScalp;extra(c,s,T,mh)}
-var COLS=[['id','Account'],['name','Name'],['n','Trades',0],['wr','Win %',3],['net','Trading P&L',1],['pf','PF',2],['br','Broker (B-book)',1],['aw','Avg win',1],['al','Avg loss',1],['mw','Max win',1],['ml','Max loss',1],['mdd','Max drawdown',1],['rk','Risk score',7],['pm','Martingale / grid',7],['ccm','Commission',1],['csw','Swap',1],['ad','Avg hold',6],['tp','Toxic %',3],['sp','Scalp %',3],['eqn','Equity-formula Net P&L',1],['flag','Flag']];
-function cv(v,f){return f===4?fm(v):f===7?'<b class="'+(v>=70?'neg':v>=40?'':'pos')+'">'+Math.round(v)+'</b>':f===0?v:f===1?sg(v):f===2?pf(v):f===3?pc(v):f===6?fd(v):v}
+ $('cmpc').hidden=CL.length<2;tc();tlist(T,!c);$('costs').innerHTML=costsHtml(s,T);cashView();symView(c);var xs=$('xs');if(xs)xs.onclick=exportScalp;extra(c,s,T,mh)}
+var COLS=[['id','Account'],['name','Name'],['n','Trades',0],['wr','Win %',3],['net','Trading P&L',1],['pf','PF',2],['br','Broker (B-book)',1],['aw','Avg win',1],['al','Avg loss',1],['mw','Max win',1],['ml','Max loss',1],['mdd','Max drawdown',1],['rk','Risk score',7],['rb','Behaviour',7],['rp','Profit risk',7],['rc','Confidence',3],['pm','Martingale / grid',7],['ccm','Commission',1],['csw','Swap',1],['ad','Avg hold',6],['tp','Toxic %',3],['sp','Scalp %',3],['eqn','Equity-formula Net P&L',1],['rl','Level'],['tags','Profile'],['flag','Flag']];
+function cv(v,f){return f===4?fm(v):f===7?'<b class="'+(v>=RT().hi?'neg':v>=RT().md?'':'pos')+'">'+Math.round(v)+'</b>':f===0?v:f===1?sg(v):f===2?pf(v):f===3?pc(v):f===6?fd(v):v}
 function tc(){var rows=CL.map(function(c){c.s.br=-c.s.net;return c.s}).sort(function(a,b){var x=a[SORT.k],y=b[SORT.k];return SORT.d*(x>y?1:x<y?-1:0)});
  $('tc').innerHTML='<table><tr>'+COLS.map(function(c){return'<th data-k="'+c[0]+'">'+c[1]+(SORT.k===c[0]?(SORT.d>0?' ▲':' ▼'):'')+'</th>'}).join('')+'</tr>'+rows.map(function(r){return'<tr data-id="'+r.id+'">'+COLS.map(function(c){var v=r[c[0]];return'<td>'+(c[0]==='flag'?'<span class="fl">'+v+'</span>':c.length<3?v:cv(v,c[2]))+'</td>'}).join('')+'</tr>'}).join('')+'</table>';
  $('tc').querySelectorAll('th').forEach(function(h){h.onclick=function(){var k=h.dataset.k;SORT=SORT.k===k?{k:k,d:-SORT.d}:{k:k,d:-1};tc()}});
@@ -256,12 +289,20 @@ function cres(c){var I=c.I,s=c.s,S=c.S,e=eqn(I),mt=S['Total Net Profit:'],cf=S['
  if(cf!=null&&Math.abs(N(cf)-(I.cin-I.cout))>.01)W.push('Report shows Credit Facility '+fm(N(cf))+' but the Deals list only has net credit '+fm(I.cin-I.cout)+' – some credit/balance operations may be missing from the export.');
  if(Math.abs(e-s.net)>1)W.push('Equity formula and closed-trade result differ by '+fm(e-s.net)+' (open trades, missing operations, or wrong opening equity).');
  $('cres').innerHTML='<div class="grid"><div class="card"><h3>Net P&amp;L (equity formula)</h3><b style="font-size:24px">'+sg(e)+'</b></div><div class="card"><h3>Closed-trade P&amp;L</h3><b style="font-size:24px">'+sg(s.net)+'</b></div><div class="card"><h3>Broker result (equity basis)</h3><b style="font-size:24px">'+sg(-e)+'</b><div class="s">Negative Net P&amp;L = broker profit</div></div></div>'+W.map(function(w){return'<div class="wn">'+w+'</div>'}).join('')}
-function pill(sc){return sc>=70?['HIGH','r']:sc>=40?['MEDIUM','']:['LOW','g']}
-function scopeAll(){var c=CL.filter(function(x){return x.id===SEL})[0];return{c:c,T:c?c.T:[].concat.apply([],CL.map(function(x){return x.T}))}}
+function pill(sc){var R=RT();return sc>=R.hi?['HIGH','r']:sc>=R.md?['MEDIUM','']:['LOW','g']}
+function scopeAll(){var c=CL.filter(function(x){return x.id===SEL})[0],T=c?c.T:[].concat.apply([],CL.map(function(x){return x.T}));return{c:c,T:T.filter(function(t){return symOk(t.sy)})}}
 function extra(c,s,T,mh){
  var rp=$('rp'),xa=$('xa');if(rp)rp.onclick=exportReport;if(xa)xa.onclick=exportAll;mgView(c);var rmc=$('rmc');if(rmc)two(rmc,'Click again to confirm',function(){removeClient(c.id)});
- if(c){var pt=c.pt,rk=risk(s,pt,mh),pl=pill(rk.score);
-  $('riskc').innerHTML='<h2>🎯 Risk score <span class="s">(higher = more risk for the broker – a guide, not a verdict)</span></h2><div class="kv">'+ring(rk.score/100,pl[1]==='r'?'var(--r)':pl[1]==='g'?'var(--g)':'#f59e0b')+'<div><b style="font-size:30px">'+Math.round(rk.score)+'</b> <span class="pill '+pl[1]+'" style="background:var(--hl)">'+pl[0]+'</span></div></div><div style="margin-top:8px">'+rk.parts.map(function(q){return'<div class="hb"><span class="l" style="width:170px">'+q[0]+'</span><span class="t"><i style="width:'+(q[2]?q[1]/q[2]*100:0)+'%;background:var(--ac)"></i></span><span class="v" style="width:60px">'+q[1].toFixed(0)+'/'+q[2]+'</span></div>'}).join('')+'</div>';
+ if(c){var pt=c.pt,rk=c.rk,pl=pill(rk.score),R=RT(),bal=base(c),
+  bars=function(L){return L.map(function(q){return'<div class="hb"><span class="l" style="width:190px" title="'+q[3]+'">'+q[0]+'</span><span class="t"><i style="width:'+(q[2]?q[1]/q[2]*100:0)+'%;background:var(--ac)"></i></span><span class="v" style="width:60px">'+q[1].toFixed(0)+'/'+q[2]+'</span></div>'}).join('')};
+  $('riskc').innerHTML='<h2>🎯 Risk profile <span class="s">(higher = more risk for the broker – a guide, not a verdict)</span></h2><div class="kv">'+ring(rk.score/100,pl[1]==='r'?'var(--r)':pl[1]==='g'?'var(--g)':'#f59e0b')+'<div><b style="font-size:30px">'+Math.round(rk.score)+'</b> <span class="pill '+pl[1]+'" style="background:var(--hl)">'+pl[0]+'</span><div class="s">Behaviour '+Math.round(rk.b)+' · Profit risk '+Math.round(rk.p)+' · overall = the higher of the two'+(rk.conf<1?' × '+pc(rk.conf)+' confidence':'')+'</div></div></div>'+
+  '<div style="margin:10px 0">'+rk.tags.map(function(t){return'<span class="fl" style="margin-right:6px">'+t+'</span>'}).join('')+'</div>'+
+  (rk.conf<1&&s.n?'<div class="wn">Only '+s.n+' trades – full confidence needs '+R.cf+'. The score is reduced to '+pc(rk.conf)+' of its raw value ('+Math.round(rk.raw)+'). Treat it as an early indication.</div>':'')+
+  '<div class="s"><b>Why this score</b></div><ul class="ins">'+rk.reasons.map(function(x){return'<li>'+x+'</li>'}).join('')+'</ul>'+
+  '<div class="wn" style="background:var(--hl);color:var(--tx)"><b>Suggested action:</b> '+rk.action+'</div>'+
+  '<div class="s" style="margin-top:10px"><b>Behaviour score ('+Math.round(rk.b)+'/100)</b> – how the client trades</div>'+bars(rk.B)+
+  '<div class="s" style="margin-top:6px"><b>Profit-risk score ('+Math.round(rk.p)+'/100)</b> – how much the client is winning</div>'+bars(rk.P)+
+  '<div class="s" style="margin-top:8px">Exposure: peak open <b>'+fm(pt.ml)+'</b> lots'+(bal>0?' ('+fm(pt.ml/bal*1000)+' lots per 1,000 of starting balance)':' (enter opening equity in the calculator to compare with balance)')+' · max drawdown '+(bal>0?pc1(dd(c.F,bal).mddp)+' of peak':fm(dd(c.F,bal).mdd))+'.</div>';
   $('patc').innerHTML='<h2>🔍 Martingale / grid check</h2><div style="font-size:18px;font-weight:700;margin-bottom:6px" class="'+(pt.score>=60?'neg':'')+'">'+pt.verdict+' <span class="s">(score '+Math.round(pt.score)+'/100)</span></div><div class="s">Max open at once: <b>'+pt.mc+'</b> positions · <b>'+fm(pt.ml)+'</b> lots · Lot size-ups after a loss: <b>'+pt.su+'</b> of '+pt.sd+' · Stacked entries: <b>'+pt.st+'</b> (max stack '+pt.ms+') · Biggest loss ÷ avg win: <b>'+pt.tail.toFixed(1)+'×</b></div><ul class="ins">'+pt.notes.map(function(x){return'<li>'+x+'</li>'}).join('')+'</ul>'}
  else{$('riskc').innerHTML='<h2>🎯 Risk score</h2><div class="m">Select one client above to see its risk score. The clients table below ranks all clients by risk.</div>';$('patc').innerHTML='<h2>🔍 Martingale / grid check</h2><div class="m">Select one client above – this check needs a single account’s trades.</div>'}
  timeView(T);cmpView();mt5View(c)}
@@ -287,15 +328,61 @@ function mt5View(c){
  if(!c){$('mt5c').innerHTML='<h2>✅ Check against the MT5 report</h2><div class="m">Select one client to compare this page’s numbers with the MT5 report’s own Results.</div>';return}
  var S=c.S,s=stat(c.T),D=dd(c.T,base(c)),pw=numOf(S['Profit Trades (% of total):']),
  R=[['Total net profit',s.net,numOf(S['Total Net Profit:'])],['Gross profit',s.gp,numOf(S['Gross Profit:'])],['Gross loss',s.gl,numOf(S['Gross Loss:'])],['Profit factor',s.pf,numOf(S['Profit Factor:'])],['Largest profit trade',s.mw,numOf(S['Largest profit trade:'])],['Largest loss trade',s.ml,numOf(S['Largest loss trade:'])],['Total trades',s.n,numOf(S['Total Trades:']),1],['Winning trades',s.w,pw,1],['Average profit trade',s.aw,numOf(S['Average profit trade:'])],['Average loss trade',s.al,numOf(S['Average loss trade:'])],['Max balance drawdown',D.mdd,numOf(S['Balance Drawdown Maximal:'])]];
- $('mt5c').innerHTML='<h2>✅ Check against the MT5 report <span class="s">(whole report, ignores the date filter)</span></h2><div class="sc"><table><tr><th>Metric</th><th>This page</th><th>MT5 report</th><th>Result</th></tr>'+R.map(function(r){var a=r[1],m=r[2];if(m==null)return'<tr><td>'+r[0]+'</td><td>'+fm(a)+'</td><td>–</td><td>not in report</td></tr>';var df=Math.abs(a-m),rel=m?df/Math.abs(m):df,st=df<.011?'✓ exact':rel<.02?'≈ close ('+(rel*100).toFixed(1)+'% off)':'✗ differs ('+(rel*100).toFixed(1)+'% off)';var F=r[3]?function(x){return''+Math.round(x)}:fm;return'<tr><td>'+r[0]+'</td><td>'+F(a)+'</td><td>'+F(m)+'</td><td class="'+(df<.011?'pos':rel<.02?'':'neg')+'">'+st+'</td></tr>'}).join('')+'</table></div><div class="s" style="margin-top:6px">Profit totals use closed positions and match exactly. Trade counts can differ because MT5 counts every closing deal (partial closes, close-by); drawdown can differ slightly because MT5 orders balance changes deal by deal.</div>'}
-function exportAll(){var f1=$('d1').value,f2=$('d2').value,H=['Account','Name','Trades','Win rate','Trading P&L','Profit factor','Broker result (B-book)','Avg win','Avg loss','Max win','Max loss','Max drawdown','Max drawdown %','Commission (info)','Swap (info)','Avg hold (sec)','Median hold (sec)','Toxic trades','Toxic % of trades','Toxic share of profit','Scalp trades','Scalp %','Scalp net P&L','Risk score','Martingale/grid score','Flag','Equity-formula Net P&L'],W=r2;
- var rows=CL.map(function(c){var s=c.s,D=dd(c.F,base(c));return[s.id,s.name||'',s.n,pc1(s.wr),W(s.net),s.pf===Infinity?'n/a':W(s.pf),W(-s.net),W(s.aw),W(s.al),W(s.mw),W(s.ml),W(D.mdd),pc1(D.mddp),W(s.ccm),W(s.csw),Math.round(s.ad),Math.round(s.mh),s.tn,pc1(s.tp),pc1(s.tsh),s.sn,pc1(s.sp),W(s.snet),Math.round(s.rk),Math.round(s.pm),s.flag,W(s.eqn)]}).sort(function(a,b){return b[23]-a[23]});
+ $('mt5c').innerHTML='<h2>✅ Check against the MT5 report <span class="s">(whole report, ignores the date and script filters)</span></h2><div class="sc"><table><tr><th>Metric</th><th>This page</th><th>MT5 report</th><th>Result</th></tr>'+R.map(function(r){var a=r[1],m=r[2];if(m==null)return'<tr><td>'+r[0]+'</td><td>'+fm(a)+'</td><td>–</td><td>not in report</td></tr>';var df=Math.abs(a-m),rel=m?df/Math.abs(m):df,st=df<.011?'✓ exact':rel<.02?'≈ close ('+(rel*100).toFixed(1)+'% off)':'✗ differs ('+(rel*100).toFixed(1)+'% off)';var F=r[3]?function(x){return''+Math.round(x)}:fm;return'<tr><td>'+r[0]+'</td><td>'+F(a)+'</td><td>'+F(m)+'</td><td class="'+(df<.011?'pos':rel<.02?'':'neg')+'">'+st+'</td></tr>'}).join('')+'</table></div><div class="s" style="margin-top:6px">Profit totals use closed positions and match exactly. Trade counts can differ because MT5 counts every closing deal (partial closes, close-by); drawdown can differ slightly because MT5 orders balance changes deal by deal.</div>'}
+function exportAll(){var f1=$('d1').value,f2=$('d2').value,H=['Account','Name','Trades','Win rate','Trading P&L','Profit factor','Broker result (B-book)','Avg win','Avg loss','Max win','Max loss','Max drawdown','Max drawdown %','Commission (info)','Swap (info)','Avg hold (sec)','Median hold (sec)','Toxic trades','Toxic % of trades','Toxic share of profit','Scalp trades','Scalp %','Scalp net P&L','Risk score','Martingale/grid score','Flag','Equity-formula Net P&L','Behaviour score','Profit-risk score','Confidence','Risk level','Profile tags','Why','Suggested action'],W=r2;
+ var rows=CL.map(function(c){var s=c.s,D=dd(c.F,base(c));return[s.id,s.name||'',s.n,pc1(s.wr),W(s.net),s.pf===Infinity?'n/a':W(s.pf),W(-s.net),W(s.aw),W(s.al),W(s.mw),W(s.ml),W(D.mdd),pc1(D.mddp),W(s.ccm),W(s.csw),Math.round(s.ad),Math.round(s.mh),s.tn,pc1(s.tp),pc1(s.tsh),s.sn,pc1(s.sp),W(s.snet),Math.round(s.rk),Math.round(s.pm),s.flag,W(s.eqn),Math.round(s.rb),Math.round(s.rp),pc(s.rc),s.rl,s.tags,s.why,s.act]}).sort(function(a,b){return b[23]-a[23]});
  var cash=[['Account','Name','Deposit','Withdrawal','Credit In','Credit Out','Other / bonus','Events']];CL.forEach(function(c){var ev=(c.ev||[]).filter(function(e){return(!f1||e.day>=f1)&&(!f2||e.day<=f2)}),m=cashSum(ev),o=0;Object.keys(m).forEach(function(k){if(/^Additional/.test(k))o+=m[k]});cash.push([c.id,c.name||'',W(m.Deposit||0),W(-(m.Withdrawal||0)),W(m['Credit In']||0),W(-(m['Credit Out']||0)),W(o),ev.length])});
- xl([{n:'Info',w:[34,40],rows:[['All clients report'],['Date range (by close date)',(f1||'start')+' to '+(f2||'end')],['Scalp definition','held up to '+THR+' s'],['Toxic definition','scalping (held up to '+THR+' s) OR burst OR reversal trade'],['Clients',CL.length],['Sorted by','Risk score (highest first)']]},{n:'Clients',w:[10,20,8,9,12,9,12,10,10,10,10,12,10,10,9,10,10,8,9,10,8,8,12,8,10,26,14],rows:[H].concat(rows)},{n:'Cash Summary',w:[10,20,12,12,12,12,12,8],rows:cash}],'All_Clients_'+(f1||'start')+'_to_'+(f2||'end')+'.xlsx')}
+ xl([{n:'Info',w:[34,40],rows:[['All clients report'],['Date range (by close date)',(f1||'start')+' to '+(f2||'end')],['Scalp definition','held up to '+THR+' s'],['Toxic definition','scalping (held up to '+THR+' s) OR burst OR reversal trade'],['Clients',CL.length],['Sorted by','Risk score (highest first)']]},{n:'Clients',w:[10,20,8,9,12,9,12,10,10,10,10,12,10,10,9,10,10,8,9,10,8,8,12,8,10,26,14,10,10,10,9,28,60,60],rows:[H].concat(rows)},{n:'Cash Summary',w:[10,20,12,12,12,12,12,8],rows:cash}],'All_Clients_'+(f1||'start')+'_to_'+(f2||'end')+'.xlsx')}
 function exportReport(){var S=scopeT(),c=S.c,f1=$('d1').value,f2=$('d2').value,css=document.querySelector('style').textContent,cl_=function(e){return e.outerHTML.replace(/<button[\s\S]*?<\/button>/g,'')},up=function(id,n){var e=$(id);while(n--)e=e.parentNode;return cl_(e)};
- var title=c?(c.name||c.id)+' · account '+c.id:'All loaded clients',parts=[cl_($('hero')),cl_($('mgc')),cl_($('cards')),cl_($('costs')),cl_($('riskc').parentNode),up('curve',1),up('days',2),up('scalp',2),up('syms',2),cl_($('timec'))];
+ var title=c?(c.name||c.id)+' · account '+c.id:'All loaded clients',parts=[cl_($('hero')),cl_($('mgc')),cl_($('cards')),cl_($('costs')),cl_($('riskc').parentNode),up('curve',1),up('days',2),up('scalp',2),up('syms',2),cl_($('symc')),cl_($('timec'))];
  var html='<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Client report – '+title+'</title><style>'+css+'.top{padding:18px 16px}@media print{body{background:#fff}.card{break-inside:avoid;box-shadow:none;animation:none}.ln{stroke-dashoffset:0!important;animation:none!important}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class="top"><div class="in"><h1>Client report – '+title+'</h1><p>Closed trades '+(f1||'start')+' → '+(f2||'end')+' · generated '+new Date().toISOString().slice(0,10)+' · scalp = held ≤ '+THR+'s</p></div></div><div class="w" style="padding-top:14px"><div style="display:grid;gap:14px">'+parts.join('')+'</div><p class="s" style="margin-top:14px">Net P&amp;L = Profit + Commission + Swap per closed position. Risk score and martingale/grid check are heuristics, not verdicts. To get a PDF: open this file and use Print → Save as PDF.</p></div></body></html>';
  saveFile('Client_Report_'+(c?c.id:'AllClients')+'_'+(f1||'start')+'_to_'+(f2||'end')+'.html',html,'text/html')}
+
+function symBar(){
+ var all={},cnt={};CL.forEach(function(c){c.T.forEach(function(t){all[t.sy]=1})});
+ Object.keys(SYMF).forEach(function(k){if(!all[k])delete SYMF[k]});
+ scopeAllRaw().forEach(function(t){cnt[t.sy]=(cnt[t.sy]||0)+1});
+ var ks=Object.keys(all).sort(),on=Object.keys(SYMF).length;
+ $('symbar').innerHTML='<b>🔣 Script / symbol filter</b><button class="tab'+(on?'':' on')+'" data-sy="*">All scripts</button>'+ks.map(function(k){return'<button class="tab'+(SYMF[k]?' on':'')+'" data-sy="'+k+'">'+k+' <span class="s" style="color:inherit;opacity:.75">'+(cnt[k]||0)+'</span></button>'}).join('')+'<span class="s" style="flex-basis:100%">Click one or more scripts – every number, chart, toxic summary and Excel report below then shows only those scripts. Click “All scripts” to reset.</span>';
+ $('symbar').querySelectorAll('button').forEach(function(b){b.onclick=function(){var k=b.dataset.sy;if(k==='*')SYMF={};else if(SYMF[k])delete SYMF[k];else SYMF[k]=1;if(CL.length)run()}})}
+function scopeAllRaw(){var c=CL.filter(function(x){return x.id===SEL})[0];return c?c.T:[].concat.apply([],CL.map(function(x){return x.T}))}
+var SYCOLS=[['k','Script',''],['n','Trades',0],['vol','Lots',1],['wr','Win %',3],['gp','Profit (wins)',5],['gl','Loss (losers)',5],['net','Net P&L',5],['pf','PF',2],['aw','Avg win',5],['al','Avg loss',5],['mw','Best trade',5],['ml','Worst trade',5],['ad','Avg hold',6],['sp','Scalp %',3],['snet','Scalp P&L',5],['tn','Toxic trades',0],['tp','Toxic %',3],['tnet','Toxic P&L',5],['cs','Share of gross profit',3],['ccm','Commission',5],['csw','Swap',5],['res','Result','']];
+
+var PAL=['#0a8f86','#d98a1a','#3b6fd9','#0e9158','#d23b3b','#8a5cd6','#d9569a','#6b7c80'];
+function symChart(rows){var R=rows.slice().sort(function(a,b){return b.net-a.net}),mx=Math.max.apply(null,R.map(function(r){return Math.max(r.gp,-r.gl)}))||1;
+ return'<div style="max-height:380px;overflow:auto;margin:6px 0">'+R.map(function(r){var gw=r.gp/mx*50,lw=-r.gl/mx*50;
+  return'<div class="hb" data-sy="'+r.k+'" style="cursor:pointer;padding:2px 4px;border-radius:8px'+(SYMF[r.k]?';background:var(--hl)':'')+'" title="'+r.k+' — profit '+fm(r.gp)+', loss '+fm(r.gl)+', net '+fm(r.net)+', '+r.n+' trades, win '+pc(r.wr)+', toxic '+pc(r.tp)+' ('+fm(r.tnet)+')"><span class="l"><b>'+r.k+'</b>'+(r.tp>=.5?' ☠':'')+'</span><span class="t" style="position:relative;height:18px"><i style="position:absolute;left:50%;top:0;width:'+gw+'%;background:var(--g);border-radius:0 6px 6px 0"></i><i style="position:absolute;right:50%;top:0;width:'+lw+'%;background:var(--r);border-radius:6px 0 0 6px;transform-origin:right"></i><span style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--mut)"></span></span><span class="v" style="width:150px">'+sg(r.net)+' <span class="s">('+r.n+')</span></span></div>'}).join('')+'</div><div class="s"><span class="pos">■ Green</span> = profit from winning trades · <span class="neg">■ Red</span> = loss from losing trades (both drawn from the centre line) · number on the right = net P&amp;L and (trades). Click a bar to filter that script. ☠ = half or more of that script’s trades are toxic.</div>'}
+function donut(rows,key,lab){var R=rows.filter(function(r){return r[key]>0}).sort(function(a,b){return b[key]-a[key]}),top=R.slice(0,7),oth=R.slice(7),tot=R.reduce(function(a,r){return a+r[key]},0);
+ if(!tot)return'<span class="m">No data</span>';
+ if(oth.length)top.push({k:'Others ('+oth.length+')',net:oth.reduce(function(a,r){return a+r.net},0),n:oth.reduce(function(a,r){return a+r.n},0),vol:oth.reduce(function(a,r){return a+r.vol},0)});
+ var cum=0,seg=top.map(function(r,i){var p=r[key]/tot*100,c='<circle cx="18" cy="18" r="15.9" fill="none" stroke="'+PAL[i%PAL.length]+'" stroke-width="5" stroke-dasharray="'+Math.max(0,p-.4)+' '+(100-Math.max(0,p-.4))+'" stroke-dashoffset="'+(-cum)+'" transform="rotate(-90 18 18)"><title>'+r.k+': '+p.toFixed(1)+'%</title></circle>';cum+=p;return c}).join('');
+ return'<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center"><svg viewBox="0 0 36 36" width="170" height="170"><circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--hl)" stroke-width="5"/>'+seg+'</svg><div style="flex:1;min-width:190px">'+top.map(function(r,i){return'<div class="hb" style="margin:3px 0"><i style="width:10px;height:10px;border-radius:3px;background:'+PAL[i%PAL.length]+';flex:none"></i><span class="l" style="width:90px"><b>'+r.k+'</b></span><span>'+(r[key]/tot*100).toFixed(0)+'%</span><span class="v" style="width:auto;flex:1">'+sg(r.net)+'</span></div>'}).join('')+'</div></div><div class="s">'+lab+'</div>'}
+function symRows(pool){var g=grp(pool,'sy');var R=Object.keys(g).map(function(k){var q=stat(g[k]);q.k=k;q.res=q.net>0?'🟢 Profit':q.net<0?'🔴 Loss':'Flat';return q}),tg=R.reduce(function(a,r){return a+r.gp},0);R.forEach(function(r){r.cs=tg?r.gp/tg:0});return R}
+function symView(c){
+ var pool=c?c.D:[].concat.apply([],CL.map(function(x){return x.D})),rows=symRows(pool),tot=stat(pool);
+ rows.sort(function(a,b){var x=a[SYSORT.k],y=b[SYSORT.k];return SYSORT.d*(x>y?1:x<y?-1:0)});
+ var win=rows.filter(function(r){return r.net>0}),los=rows.filter(function(r){return r.net<0}),wn=win.reduce(function(a,r){return a+r.net},0),ln=los.reduce(function(a,r){return a+r.net},0),
+ best=rows.slice().sort(function(a,b){return b.net-a.net})[0],worst=rows.slice().sort(function(a,b){return a.net-b.net})[0],topc=rows.slice().sort(function(a,b){return b.gp-a.gp})[0];
+ var fmtc=function(r,col){var v=r[col[0]];return col[0]==='k'?'<b>'+v+'</b>':col[0]==='res'?v:col[2]===0?v:col[0]==='vol'?fm(v):col[2]===3?pc(v):col[2]===2?pf(v):col[2]===6?fd(v):sg(v)};
+ $('symc').innerHTML='<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px"><h2 style="margin:0">📊 Script-wise P&amp;L <span class="s">(where does this client make profit and where does it lose? uses the date range and client above, ignores the script filter so you can compare)</span></h2><button class="dlb" id="xsy">⬇ Download script-wise (Excel)</button></div>'+
+ (rows.length?'<div class="grid" style="margin:10px 0"><div class="card"><h3>Profit-making scripts</h3><b class="pos" style="font-size:22px">'+win.length+'</b><div class="s">together '+sg(wn)+'</div></div><div class="card"><h3>Losing scripts</h3><b class="neg" style="font-size:22px">'+los.length+'</b><div class="s">together '+sg(ln)+'</div></div><div class="card"><h3>Best script</h3><b style="font-size:22px">'+best.k+'</b><div class="s">'+sg(best.net)+' · '+best.n+' trades</div></div><div class="card"><h3>Worst script</h3><b style="font-size:22px">'+worst.k+'</b><div class="s">'+sg(worst.net)+' · '+worst.n+' trades</div></div><div class="card"><h3>Profit concentration</h3><b style="font-size:22px">'+pc(topc.cs)+'</b><div class="s">of all profit comes from '+topc.k+'</div></div></div>'+
+ symChart(rows)+'<details><summary>📋 Detailed script table (all columns)</summary><div><div class="sc"><table><tr>'+SYCOLS.map(function(col){return'<th data-k="'+col[0]+'">'+col[1]+(SYSORT.k===col[0]?(SYSORT.d>0?' ▲':' ▼'):'')+'</th>'}).join('')+'</tr>'+
+ rows.map(function(r){return'<tr data-sy="'+r.k+'"'+(SYMF[r.k]?' style="background:var(--hl)"':'')+'>'+SYCOLS.map(function(col){return'<td>'+fmtc(r,col)+'</td>'}).join('')+'</tr>'}).join('')+
+ '<tr style="font-weight:700"><td>TOTAL</td><td>'+tot.n+'</td><td>'+fm(tot.vol)+'</td><td>'+pc(tot.wr)+'</td><td>'+sg(tot.gp)+'</td><td>'+sg(tot.gl)+'</td><td>'+sg(tot.net)+'</td><td>'+pf(tot.pf)+'</td><td>'+sg(tot.aw)+'</td><td>'+sg(tot.al)+'</td><td>'+sg(tot.mw)+'</td><td>'+sg(tot.ml)+'</td><td>'+fd(tot.ad)+'</td><td>'+pc(tot.sp)+'</td><td>'+sg(tot.snet)+'</td><td>'+tot.tn+'</td><td>'+pc(tot.tp)+'</td><td>'+sg(tot.tnet)+'</td><td>100%</td><td>'+sg(tot.ccm)+'</td><td>'+sg(tot.csw)+'</td><td></td></tr></table></div><div class="s" style="margin-top:6px">Click a column to sort. Click a script row to filter the whole page to that script (click again to remove). Net P&amp;L = profit + commission + swap.</div></div></details>':'<div class="m">No trades in this date range.</div>');
+ $('symc').querySelectorAll('th').forEach(function(h){h.onclick=function(){var k=h.dataset.k;SYSORT=SYSORT.k===k?{k:k,d:-SYSORT.d}:{k:k,d:k==='k'?1:-1};symView(c)}});
+ $('symc').querySelectorAll('tr[data-sy],.hb[data-sy]').forEach(function(r){r.onclick=function(){var k=r.dataset.sy;if(SYMF[k])delete SYMF[k];else SYMF[k]=1;run()}});
+ $('xsy').onclick=function(){exportSym(c,pool)}}
+function exportSym(c,pool){var f1=$('d1').value,f2=$('d2').value,W=r2,rows=symRows(pool).sort(function(a,b){return b.net-a.net}),tot=stat(pool);
+ var H=['Script','Trades','Lots','Win %','Profit (wins)','Loss (losers)','Net P&L','Profit factor','Avg win','Avg loss','Best trade','Worst trade','Avg hold (sec)','Scalp trades','Scalp %','Scalp P&L','Commission (info)','Swap (info)','Result','Toxic trades','Toxic %','Toxic P&L','Share of gross profit'];
+ var line=function(k,q,r){return[k,q.n,W(q.vol),pc1(q.wr),W(q.gp),W(q.gl),W(q.net),q.pf===Infinity?'n/a':W(q.pf),W(q.aw),W(q.al),W(q.mw),W(q.ml),Math.round(q.ad),q.sn,pc1(q.sp),W(q.snet),W(q.ccm),W(q.csw),r,q.tn,pc1(q.tp),W(q.tnet),pc1(q.cs==null?1:q.cs)]};
+ var sum=rows.map(function(q){return line(q.k,q,q.res.replace(/[^A-Za-z]/g,''))});sum.push(line('TOTAL',tot,''));
+ var sheets=[{n:'Info',w:[30,40],rows:[['Script-wise P&L report'],['Client',c?c.id+(c.name?' – '+c.name:''):'All loaded clients'],['Date range (by close date)',(f1||'start')+' to '+(f2||'end')],['Net P&L','Profit + Commission + Swap per closed position'],['Scalp definition','held up to '+THR+' s'],['Sorted by','Net P&L (best first)']]},
+ {n:'By Script',w:[12,8,9,8,13,13,13,10,10,10,11,11,12,9,9,11,12,10,10,10,9,11,12],rows:[H].concat(sum)}];
+ if(!c){var cids=CL.map(function(x){return x.id}),g=grp(pool,'sy'),hd=['Script'].concat(cids,['Total']);
+  sheets.push({n:'Script x Client',w:[12].concat(cids.map(function(){return 13}),[13]),rows:[hd].concat(Object.keys(g).sort().map(function(k){var by=grp(g[k],'cid');return[k].concat(cids.map(function(id){return by[id]?W(stat(by[id]).net):0}),[W(stat(g[k]).net)])}))})}
+ var gd=grp(pool,'sy'),days=Object.keys(grp(pool,'day')).sort(),sy=Object.keys(gd).sort();
+ sheets.push({n:'Script x Day',w:[12].concat(sy.map(function(){return 12}),[12]),rows:[['Close date'].concat(sy,['Total'])].concat(days.map(function(d){var q=pool.filter(function(t){return t.day===d});return[d].concat(sy.map(function(k){var z=q.filter(function(t){return t.sy===k});return z.length?W(stat(z).net):0}),[W(stat(q).net)])}))});
+ xl(sheets,fn(c,f1,f2,'Scriptwise_PnL'))}
 function two(btn,txt,fn){btn.onclick=function(e){e.stopPropagation();if(btn.dataset.arm){fn();return}btn.dataset.arm='1';var o=btn.textContent;btn.textContent=txt;setTimeout(function(){btn.dataset.arm='';btn.textContent=o},3000)}}
 function removeClient(id){CL=CL.filter(function(x){return x.id!==id});
  if(!CL.length){SEL='*';$('app').hidden=true;$('msg').textContent='All clients removed. Drop a file to start again.';return}
@@ -310,12 +397,12 @@ function mg(c){var T=c.F,s=stat(T),D=dd(T,base(c)),f1=$('d1').value,f2=$('d2').v
  flow=s.sp>=.5?'Scalping-dominant flow':mh<=86400?'Intraday active flow':'Swing / position flow',
  pat=(bu.p>=3||rv.p>=3)?(bu.n>=rv.n?'Burst/High-Frequency Toxic Flow':'Reversal / Flip Toxic Flow'):s.sp>=.5?'Scalping Flow':c.pt.score>=60?'Martingale / Grid Style':'Normal Trading',
  bal=c.S['Balance:'],eq=c.S['Equity:'];
- return{c:c,id:c.id,name:c.name||'',period:(f1||'start')+' to '+(f2||'end'),n:s.n,net:s.net,wr:s.wr*100,pf:s.pf,mdd:-D.mdd,sc:sc,rv:rv,bu:bu,tox:s.n?tox/s.n*100:0,br:s.n?brn/s.n*100:0,flow:flow,pat:pat,dep:dep,wd:wd,cin:cin,co:co,ncr:cin-co,ndw:dep-wd,bal:bal==null?null:N(bal),eq:eq==null?null:N(eq)}}
+ return{c:c,rk:c.rk,id:c.id,name:c.name||'',period:(f1||'start')+' to '+(f2||'end'),n:s.n,net:s.net,wr:s.wr*100,pf:s.pf,mdd:-D.mdd,sc:sc,rv:rv,bu:bu,tox:s.n?tox/s.n*100:0,br:s.n?brn/s.n*100:0,flow:flow,pat:pat,dep:dep,wd:wd,cin:cin,co:co,ncr:cin-co,ndw:dep-wd,bal:bal==null?null:N(bal),eq:eq==null?null:N(eq)}}
 function mgText(x){var p1=function(v){return v.toFixed(1)+'%'},L=['Account: '+x.id,'Period: '+x.period,'Total Trades: '+x.n,'Total Profit: '+money(x.net),'Win Rate: '+x.wr.toFixed(2)+'%','Profit Factor: '+(x.pf===Infinity?'n/a':x.pf.toFixed(2)),'Max Drawdown: '+money(x.mdd),
  'Scalping Trades: '+x.sc.n+' ('+p1(x.sc.p)+' of total)','Scalping Profit: '+money(x.sc.net)+' ('+p1(x.sc.sh)+' of total profit)',
  'Reversal Trades: '+x.rv.n+' ('+p1(x.rv.p)+' of total)','Reversal Profit: '+money(x.rv.net)+' ('+p1(x.rv.sh)+' of total profit)',
  'Burst Trades: '+x.bu.n+' ('+p1(x.bu.p)+' of total)','Burst Profit: '+money(x.bu.net)+' ('+p1(x.bu.sh)+' of total profit)',
- 'Toxic Trading %: '+p1(x.tox),'Toxic Trading (b+r): '+p1(x.br),'Flow: '+x.flow,'Trading Pattern: '+x.pat,'',
+ 'Toxic Trading %: '+p1(x.tox),'Toxic Trading (b+r): '+p1(x.br),'Flow: '+x.flow,'Trading Pattern: '+x.pat,'Risk Score: '+Math.round(x.rk.score)+' ('+x.rk.level+') – Behaviour '+Math.round(x.rk.b)+' / Profit risk '+Math.round(x.rk.p)+(x.rk.conf<1?' (low confidence: '+x.n+' trades)':''),'Profile: '+x.rk.tags.join(', '),'Suggested action: '+x.rk.action,'',
  'Deposits: '+x.dep.toFixed(2),'Withdrawals: '+x.wd.toFixed(2),'Credit In: '+x.cin.toFixed(2),'Credit Out: '+x.co.toFixed(2),'Net Credit: '+x.ncr.toFixed(2),'Net D/W: '+x.ndw.toFixed(2),
  'Current Balance: '+(x.bal==null?'n/a':x.bal.toFixed(2)),'Current Equity: '+(x.eq==null?'n/a':x.eq.toFixed(2))];return L.join('\n')}
 function mgScope(){var S=scopeT();return{c:S.c,X:(S.c?[S.c]:CL).map(mg)}}
@@ -324,9 +411,9 @@ function mgView(c){var M=mgScope(),txt=M.X.map(mgText).join('\n\n'+'-'.repeat(34
  $('mgp').textContent=txt;var f1=$('d1').value,f2=$('d2').value,nm=fn(M.c,f1,f2,'Management_Summary');
  $('mgc1').onclick=function(){copyTxt(txt,$('mgc1'))};
  $('mgc2').onclick=function(){saveFile(nm.replace('.xlsx','.txt'),txt,'text/plain')};
- $('mgc3').onclick=function(){var H=['Account','Name','Period','Total Trades','Total Profit','Win Rate %','Profit Factor','Max Drawdown','Scalping Trades','Scalping % of trades','Scalping Profit','Scalping % of profit','Reversal Trades','Reversal % of trades','Reversal Profit','Reversal % of profit','Burst Trades','Burst % of trades','Burst Profit','Burst % of profit','Toxic Trading %','Toxic Trading (b+r) %','Flow','Trading Pattern','Deposits','Withdrawals','Credit In','Credit Out','Net Credit','Net D/W','Current Balance','Current Equity'],R=r2;
-  var rows=M.X.map(function(x){return[x.id,x.name,x.period,x.n,R(x.net),R(x.wr),x.pf===Infinity?'n/a':R(x.pf),R(x.mdd),x.sc.n,R(x.sc.p),R(x.sc.net),R(x.sc.sh),x.rv.n,R(x.rv.p),R(x.rv.net),R(x.rv.sh),x.bu.n,R(x.bu.p),R(x.bu.net),R(x.bu.sh),R(x.tox),R(x.br),x.flow,x.pat,R(x.dep),R(x.wd),R(x.cin),R(x.co),R(x.ncr),R(x.ndw),x.bal==null?'':R(x.bal),x.eq==null?'':R(x.eq)]});
-  xl([{n:'Management Summary',w:[10,18,26,8,12,9,9,12,9,9,12,9,9,9,11,9,8,8,11,9,9,9,24,32,12,12,10,10,10,12,14,14],rows:[H].concat(rows)},
+ $('mgc3').onclick=function(){var H=['Account','Name','Period','Total Trades','Total Profit','Win Rate %','Profit Factor','Max Drawdown','Scalping Trades','Scalping % of trades','Scalping Profit','Scalping % of profit','Reversal Trades','Reversal % of trades','Reversal Profit','Reversal % of profit','Burst Trades','Burst % of trades','Burst Profit','Burst % of profit','Toxic Trading %','Toxic Trading (b+r) %','Flow','Trading Pattern','Deposits','Withdrawals','Credit In','Credit Out','Net Credit','Net D/W','Current Balance','Current Equity','Risk Score','Risk Level','Profile Tags','Suggested Action'],R=r2;
+  var rows=M.X.map(function(x){return[x.id,x.name,x.period,x.n,R(x.net),R(x.wr),x.pf===Infinity?'n/a':R(x.pf),R(x.mdd),x.sc.n,R(x.sc.p),R(x.sc.net),R(x.sc.sh),x.rv.n,R(x.rv.p),R(x.rv.net),R(x.rv.sh),x.bu.n,R(x.bu.p),R(x.bu.net),R(x.bu.sh),R(x.tox),R(x.br),x.flow,x.pat,R(x.dep),R(x.wd),R(x.cin),R(x.co),R(x.ncr),R(x.ndw),x.bal==null?'':R(x.bal),x.eq==null?'':R(x.eq),R(x.rk.score),x.rk.level,x.rk.tags.join(', '),x.rk.action]});
+  xl([{n:'Management Summary',w:[10,18,26,8,12,9,9,12,9,9,12,9,9,9,11,9,8,8,11,9,9,9,24,32,12,12,10,10,10,12,14,14,10,10,28,60],rows:[H].concat(rows)},
   {n:'Definitions',w:[26,90],rows:[['Item','Definition'],['Date range','Trades by close date; cash events by date'],['Scalping trade','Held up to '+THR+' seconds (top filter)'],['Burst trade','Part of a group of at least '+(+$('bn').value||5)+' trades on the same symbol opened within '+(+$('bw').value||60)+' seconds'],['Reversal trade','Opened within '+(+$('rw').value||60)+' seconds after an opposite-direction trade on the same symbol closed'],['Toxic Trading %','Trades that are scalping OR burst OR reversal, as % of all trades'],['Toxic Trading (b+r)','Trades that are burst OR reversal, as % of all trades'],['% of total profit','Net P&L of that group divided by total net P&L'],['Flow','Scalping-dominant if scalp trades >= 50%; Intraday if median hold <= 24h; otherwise Swing / position'],['Trading Pattern','Burst/Reversal toxic if burst or reversal >= 3% of trades; else Scalping if scalp >= 50%; else Martingale/Grid if grid score >= 60; else Normal'],['Net D/W','Deposits minus withdrawals'],['Net Credit','Credit in minus credit out'],['Current Balance / Equity','Values printed in the MT5 report (not date-filtered)']]}],nm)}}
 function copyTxt(t,btn){var o=btn.textContent;function ok(){btn.textContent='✓ Copied';setTimeout(function(){btn.textContent=o},1500)}
  function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();var r=false;try{r=document.execCommand('copy')}catch(e){}document.body.removeChild(a);if(r)ok();else{var s=window.getSelection(),g=document.createRange();g.selectNodeContents($('mgp'));s.removeAllRanges();s.addRange(g);btn.textContent='Selected – press Ctrl+C';setTimeout(function(){btn.textContent=o},2500)}}
@@ -373,9 +460,9 @@ function setDates(p){var r=dayRange(),a=r[0],b=r[1];$('d1').min=$('d2').min=a;$(
 document.querySelectorAll('#pre button').forEach(function(x){x.onclick=function(){setDates(x.dataset.p);run()}});
 ['d1','d2'].forEach(function(i){$(i).oninput=function(){document.querySelectorAll('#pre button').forEach(function(x){x.classList.remove('on')});if(CL.length)run()}});
 document.querySelectorAll('#tp button').forEach(function(b){b.onclick=function(){$('thr').value=b.dataset.s;if(CL.length)run()}});
-['thr','bn','bw','rw','mn','sp'].forEach(function(i){$(i).oninput=function(){if(CL.length)run()}});
-$('ex').onclick=function(){var l=['Account,Name,Trades,WinRate,TradingPnL,ProfitFactor,EquityNetPnL,BrokerResult,AvgWin,AvgLoss,MaxWin,MaxLoss,MaxDrawdown,MaxDrawdownPct,Commission,Swap,AvgHoldSec,MedianHoldSec,ToxicTrades,ToxicPct,ToxicShareOfProfit,Payoff,Lots,ScalpTrades,ScalpPct,ScalpNet,Flag'];
- CL.forEach(function(c){var s=c.s;l.push([s.id,'"'+(s.name||'')+'"',s.n,s.wr.toFixed(4),s.net.toFixed(2),s.pf===Infinity?'inf':s.pf.toFixed(2),s.eqn.toFixed(2),(-s.net).toFixed(2),s.aw.toFixed(2),s.al.toFixed(2),s.mw.toFixed(2),s.ml.toFixed(2),s.mdd.toFixed(2),s.mddp.toFixed(4),s.ccm.toFixed(2),s.csw.toFixed(2),Math.round(s.ad),Math.round(s.mh),s.tn,s.tp.toFixed(4),s.tsh.toFixed(4),s.po.toFixed(2),s.vol.toFixed(2),s.sn,s.sp.toFixed(4),s.snet.toFixed(2),s.flag].join(','))});
+['thr','bn','bw','rw','mn','sp','rtx','rsc','rcf','rhi','rmd','rfl'].forEach(function(i){$(i).oninput=function(){if(CL.length)run()}});
+$('ex').onclick=function(){var l=['Account,Name,Trades,WinRate,TradingPnL,ProfitFactor,EquityNetPnL,BrokerResult,AvgWin,AvgLoss,MaxWin,MaxLoss,MaxDrawdown,MaxDrawdownPct,Commission,Swap,AvgHoldSec,MedianHoldSec,ToxicTrades,ToxicPct,ToxicShareOfProfit,Payoff,Lots,ScalpTrades,ScalpPct,ScalpNet,Flag,RiskScore,BehaviourScore,ProfitRiskScore,RiskLevel,Tags'];
+ CL.forEach(function(c){var s=c.s;l.push([s.id,'"'+(s.name||'')+'"',s.n,s.wr.toFixed(4),s.net.toFixed(2),s.pf===Infinity?'inf':s.pf.toFixed(2),s.eqn.toFixed(2),(-s.net).toFixed(2),s.aw.toFixed(2),s.al.toFixed(2),s.mw.toFixed(2),s.ml.toFixed(2),s.mdd.toFixed(2),s.mddp.toFixed(4),s.ccm.toFixed(2),s.csw.toFixed(2),Math.round(s.ad),Math.round(s.mh),s.tn,s.tp.toFixed(4),s.tsh.toFixed(4),s.po.toFixed(2),s.vol.toFixed(2),s.sn,s.sp.toFixed(4),s.snet.toFixed(2),s.flag,Math.round(s.rk),Math.round(s.rb),Math.round(s.rp),s.rl,'"'+s.tags+'"'].join(','))});
  saveFile('client-analysis.csv',l.join('\n'),'text/csv')};
 var dz=$('dz'),fi=$('f');dz.onclick=function(){fi.click()};fi.onchange=function(){if(fi.files.length)load(fi.files)};
 dz.ondragover=function(e){e.preventDefault();dz.classList.add('h')};dz.ondragleave=function(){dz.classList.remove('h')};
